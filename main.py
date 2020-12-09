@@ -14,6 +14,9 @@ app = Flask(__name__)
 line_bot_api = LineBotApi(config.CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.CHANNEL_SECRET)
 
+@app.route("/")
+def hello_world():
+    return "hello world!"
 
 @app.route("/callback", methods=["POST"])
 def callback():
@@ -39,9 +42,11 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(text='Hello World!')
+        event.reply_token, TextSendMessage(text=event.message.text)
     )
 
 
 if __name__ == "__main__":
-    app.run()
+    # app.run()
+    port = int(os.getenv("PORT"))
+    app.run(host="0.0.0.0", port=port)
