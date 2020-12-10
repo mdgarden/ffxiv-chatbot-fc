@@ -139,4 +139,3 @@ cython_debug/
 
 #personal Information
 config.py
-.venv
