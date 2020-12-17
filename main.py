@@ -1,7 +1,9 @@
 import config
 import os
+import tweepy
 from flask import Flask, request, abort
 
+from scrapper import extract_maintenance_post_jp
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
@@ -42,8 +44,14 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+
+    user_message = event.message.text
+    maintenance = "@점검"
+    if maintenance in user_message:
+        response_content = extract_maintenance_post_jp()
+        
     line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(text="test")
+        event.reply_token, TextSendMessage(text=response_content)
     )
 
 
