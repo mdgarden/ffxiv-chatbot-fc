@@ -20,5 +20,3 @@ def extract_maintenance_post_jp():
 
 def extract_maintenance_post_kr():
     pass
-
-extract_maintenance_post_jp()
