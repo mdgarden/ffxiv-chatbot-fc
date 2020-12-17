@@ -1,6 +1,6 @@
 import config
 import os
-import tweepy
+# import tweepy
 from flask import Flask, request, abort
 
 from scrapper import extract_maintenance_post_jp
@@ -49,7 +49,7 @@ def handle_message(event):
     maintenance = "@점검"
     if maintenance in user_message:
         response_content = extract_maintenance_post_jp()
-        
+    print(user_message)
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text=response_content)
     )
