@@ -44,7 +44,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-
+    response_content = ""
     user_message = event.message.text
     maintenance = "@점검"
     if maintenance in user_message:
