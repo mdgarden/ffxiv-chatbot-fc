@@ -10,6 +10,8 @@ pytest = "*"
 Flask = "*"
 line-bot-sdk = "*"
 gspread = "*"
+beautifulsoup4 = "*"
+bs4 = "*"
 
 [requires]
 python_version = "3.8"
