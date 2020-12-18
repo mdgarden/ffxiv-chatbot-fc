@@ -13,6 +13,7 @@ gspread = "*"
 beautifulsoup4 ="*"
 fake_useragent="*"
 lxml = "*"
+black = "*"
 
 [requires]
 python_version = "3.8"
