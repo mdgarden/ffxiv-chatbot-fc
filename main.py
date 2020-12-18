@@ -3,7 +3,8 @@ import os
 # import tweepy
 from flask import Flask, request, abort
 
-from scrapper import extract_maintenance_post_jp
+
+from components.command import find_command
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
@@ -16,6 +17,9 @@ app = Flask(__name__)
 
 line_bot_api = LineBotApi(config.CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.CHANNEL_SECRET)
+
+dot_command = "@"
+search = "?"
 
 @app.route("/")
 def hello_world():
@@ -46,9 +50,13 @@ def callback():
 def handle_message(event):
     response_content = ""
     user_message = event.message.text
-    maintenance = "@점검"
-    if maintenance in user_message:
-        response_content = extract_maintenance_post_jp()
+
+    if user_message[0:1] == dot_command:
+        response_content = find_command(user_message)
+    elif user_message[0:1] == search:
+        pass
+
+    if response_content != "":
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=response_content)
         )
