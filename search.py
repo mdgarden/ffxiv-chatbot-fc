@@ -25,6 +25,7 @@ def get_soup(url):
 
 
 def search_tarto(keyword):
+    keyword = keyword[1:]
     item_html = get_soup(TARTO_URL + TARTO_SEARCH + keyword)
     item_info = item_html.find_all("script")[-5].get_text()
     # except:
