@@ -36,9 +36,9 @@ def search_tarto(keyword):
     item_name_lang = (
         get_soup(item_link).find("div", {"id": "item-name-lang"}).get_text()
     )
-    item_name_kr = item_contents.find("div", {"id": "item-name"}).get_text()
-    message = keyword + "검색결과 : " + item_name_kr + item_name_lang + "\n\n" + item_link
-    return message
+    item_name_kr = get_soup(item_link).find("div", {"id": "item-name"}).get_text()
+    message = keyword + " 검색결과 : " + item_name_kr + item_name_lang + "\n\n" + item_link
+    print(message)
 
 
 def search_ffxiv_db():
