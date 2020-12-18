@@ -4,7 +4,7 @@ import os
 from flask import Flask, request, abort
 
 
-from components.command import find_command
+from command import find_command
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
