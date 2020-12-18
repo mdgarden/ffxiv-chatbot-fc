@@ -65,7 +65,7 @@ def extract_character_profile(info):
             "p", {"class": "frame__chara__title"}
         ).get_text()
     except:
-        pass
+        character_title = ""
     character_job = contents.find("div", {"class": "character__class__data"}).get_text()
     character_information = (
         character_title
