@@ -32,8 +32,9 @@ def search_tarto(keyword):
 
     item_id = item_info[item_info.find('[{"id":') + 7 : item_info.find(',"icon"')]
     item_link = TARTO_URL + TARTO_VIEW + item_id
-    item_contents = get_soup(item_link).find("div", {"id": "item-section"})
-    item_name_lang = item_contents.find("div", {"id": "item-name-lang"}).get_text()
+    item_name_lang = (
+        get_soup(item_link).find("div", {"id": "item-name-lang"}).get_text()
+    )
     item_name_kr = item_contents.find("div", {"id": "item-name"}).get_text()
     message = keyword + "검색결과 : " + item_name_kr + item_name_lang + "\n\n" + item_link
     return message
