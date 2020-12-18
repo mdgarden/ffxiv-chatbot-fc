@@ -6,4 +6,4 @@
 
 - [ ] Search Items in FFXIV DB
 - [ ] Notice Maintenance, Mog Station Updates, Events, forums, etc.
-- [ ] Get personal schedule and information by Lodestone
+- [x] Get personal schedule and information by Lodestone
