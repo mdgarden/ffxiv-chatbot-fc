@@ -16,6 +16,7 @@ command_list = {
 
 
 def find_command(command):
+
     try:
         first_command = command_list[command]
     except:
