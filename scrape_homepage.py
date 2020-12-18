@@ -60,7 +60,12 @@ def extract_character_profile(info):
     contents = get_soup(character_url)
 
     character_name = contents.find("p", {"class": "frame__chara__name"}).get_text()
-    character_title = contents.find("p", {"class": "frame__chara__title"}).get_text()
+    try:
+        character_title = contents.find(
+            "p", {"class": "frame__chara__title"}
+        ).get_text()
+    except:
+        pass
     character_job = contents.find("div", {"class": "character__class__data"}).get_text()
     character_information = (
         character_title
