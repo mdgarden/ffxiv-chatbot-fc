@@ -27,7 +27,7 @@ def find_command(command):
         if category == "maintenance":
             return extract_maintenance_post_jp()
         elif category == "link":
-            pass
+            return send_link()
         elif category == "character":
             return extract_character_profile(first_command)
         elif category == "manual":
