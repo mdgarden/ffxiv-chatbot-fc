@@ -23,27 +23,50 @@ def get_soup(url):
 
 
 def extract_maintenance_post_jp():
-    jp_notice_block = get_soup(FFXIV_JP_URL + LODESTONE).find(
-        "div", {"class": "toptabchanger_newsbox"}
+    jp_notice_block = (
+        get_soup(FFXIV_JP_URL + LODESTONE)
+        .find("div", {"class": "toptabchanger_newsbox"})
+        .find("ul")
     )
     notice_list = jp_notice_block.find_all("li", {"class": "news__list"})
-    maintenance_url = notice_list[1].find("a").attrs["href"]
-    # TODO : 멘테 태그로 찾을 수 있게 변경 / 22일 당일 공홈 html구조 확인
+    maintenance_url_list = []
+    for li in notice_list:
+        try:
+            maintenance_url = li.find(
+                "a", {"class": "news__list--link ic__maintenance--list"}
+            ).attrs["href"]
+        except:
+            pass
 
-    maintenance_contents = (
-        get_soup(FFXIV_JP_URL + maintenance_url)
-        .find("div", {"class": "news__detail__wrapper"})
-        .get_text()
-    )
-    maintenance_time = maintenance_contents.find("日　時")
-    message = (
-        "◆글섭 최신 점검 공지\n\n"
-        + maintenance_contents[maintenance_time:]
-        + "\n\n"
-        + FFXIV_JP_URL
-        + maintenance_url
-    )
-    return message
+        if maintenance_url is not None and maintenance_url not in maintenance_url_list:
+            maintenance_url_list.append(maintenance_url)
+
+    num = 0
+    message = "◆글섭 최신 점검 공지\n\n"
+
+    for link in maintenance_url_list:
+        num += 1
+        m = get_soup(FFXIV_JP_URL + link)
+        m_title = m.find("header", {"class": "news__header"}).find("h1").text.lstrip()
+        maintenance_contents = m.find(
+            "div", {"class": "news__detail__wrapper"}
+        ).get_text()
+        maintenance_time = maintenance_contents.find("日　時")
+        list_message = (
+            str(num)
+            + ". "
+            + m_title
+            + "\n"
+            + maintenance_contents[maintenance_time:]
+            + "\n\n"
+            + FFXIV_JP_URL
+            + link
+            + "\n\n"
+        )
+        message = message + list_message
+
+    print(message)
+    # return message
 
 
 def extract_maintenance_post_kr():
@@ -77,3 +100,6 @@ def extract_character_profile(info):
         + character_url
     )
     return character_information
+
+
+extract_maintenance_post_jp()
