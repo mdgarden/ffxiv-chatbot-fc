@@ -23,13 +23,15 @@ def get_soup(url):
 
 
 def extract_maintenance_post_jp():
-    jp_notice_block = (
+    maintenance_url_list = []
+
+    notice_list = (
         get_soup(FFXIV_JP_URL + LODESTONE)
         .find("div", {"class": "toptabchanger_newsbox"})
         .find("ul")
+        .find_all("li", {"class": "news__list"})
     )
-    notice_list = jp_notice_block.find_all("li", {"class": "news__list"})
-    maintenance_url_list = []
+
     for li in notice_list:
         try:
             maintenance_url = li.find(
@@ -41,29 +43,34 @@ def extract_maintenance_post_jp():
         if maintenance_url is not None and maintenance_url not in maintenance_url_list:
             maintenance_url_list.append(maintenance_url)
 
-    num = 0
-    message = "◆글섭 최신 점검 공지\n\n"
+    if len(maintenance_url_list) >= 1:
+        num = 0
+        message = "◆ 글섭 최신 점검 공지\n\n"
 
-    for link in maintenance_url_list:
-        num += 1
-        m = get_soup(FFXIV_JP_URL + link)
-        m_title = m.find("header", {"class": "news__header"}).find("h1").text.lstrip()
-        maintenance_contents = m.find(
-            "div", {"class": "news__detail__wrapper"}
-        ).get_text()
-        maintenance_time = maintenance_contents.find("日　時")
-        list_message = (
-            str(num)
-            + ". "
-            + m_title
-            + "\n"
-            + maintenance_contents[maintenance_time:]
-            + "\n\n"
-            + FFXIV_JP_URL
-            + link
-            + "\n\n"
-        )
-        message = message + list_message
+        for link in maintenance_url_list:
+            num += 1
+            m = get_soup(FFXIV_JP_URL + link)
+            m_title = (
+                m.find("header", {"class": "news__header"}).find("h1").text.lstrip()
+            )
+            maintenance_contents = m.find(
+                "div", {"class": "news__detail__wrapper"}
+            ).get_text()
+            maintenance_time = maintenance_contents.find("日　時")
+            list_message = (
+                str(num)
+                + ". "
+                + m_title
+                + "\n"
+                + maintenance_contents[maintenance_time:]
+                + "\n\n"
+                + FFXIV_JP_URL
+                + link
+                + "\n\n\n"
+            )
+            message = message + list_message
+        else:
+            message = "글섭의 최신 점검관련 공지가 없습니다."
 
     return message
 
