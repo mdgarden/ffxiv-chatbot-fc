@@ -24,6 +24,8 @@ def get_soup(url):
 
 def extract_maintenance_post_jp():
     maintenance_url_list = []
+    num = 0
+    message = "◆ 글섭 최신 점검 공지\n\n"
 
     notice_list = (
         get_soup(FFXIV_JP_URL + LODESTONE)
@@ -43,13 +45,8 @@ def extract_maintenance_post_jp():
         if maintenance_url is not None and maintenance_url not in maintenance_url_list:
             maintenance_url_list.append(maintenance_url)
 
-    if len(maintenance_url_list) >= 1:
-        num = 0
-        message = "◆ 글섭 최신 점검 공지\n\n"
-
-        for link in maintenance_url_list:
             num += 1
-            m = get_soup(FFXIV_JP_URL + link)
+            m = get_soup(FFXIV_JP_URL + maintenance_url)
             m_title = (
                 m.find("header", {"class": "news__header"}).find("h1").text.lstrip()
             )
@@ -65,12 +62,13 @@ def extract_maintenance_post_jp():
                 + maintenance_contents[maintenance_time:]
                 + "\n\n"
                 + FFXIV_JP_URL
-                + link
+                + maintenance_url
                 + "\n\n\n"
             )
             message = message + list_message
-        else:
-            message = "글섭의 최신 점검관련 공지가 없습니다."
+
+    if len(maintenance_url_list) >= 1:
+        message = "글섭의 최신 점검관련 공지가 없습니다."
 
     return message
 

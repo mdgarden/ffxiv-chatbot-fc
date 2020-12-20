@@ -12,6 +12,7 @@ command_list = {
     "@교수님": {"category": "character", "name": "Meetra Surik", "profile": "14369815"},
     "@로딩": {"category": "character", "name": "Cilia Aden", "profile": "25206858"},
     "@공홈": {"category": "link"},
+    "@타타루": {"category": "manual"},
 }
 
 
@@ -29,5 +30,12 @@ def find_command(command):
             pass
         elif category == "character":
             return extract_character_profile(first_command)
+        elif category == "manual":
+            return send_manual()
         else:
             pass
+
+
+def send_manual():
+    message = "명령어 목록이에용!\n@+캐릭터 이름 : 로드스톤 링크\n@점검 : 최신 점검 관련 공지 목록(한섭 업뎃 예정)\n!+검색어 : 해당 아이템을 검색 후 언어별 이름 출력(업뎃예정)\n@공홈 : 공홈 링크를 불러옵니다"
+    return message
