@@ -65,8 +65,7 @@ def extract_maintenance_post_jp():
         )
         message = message + list_message
 
-    print(message)
-    # return message
+    return message
 
 
 def extract_maintenance_post_kr():
@@ -100,6 +99,3 @@ def extract_character_profile(info):
         + character_url
     )
     return character_information
-
-
-extract_maintenance_post_jp()
