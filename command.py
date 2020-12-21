@@ -42,5 +42,5 @@ def send_manual():
 
 
 def send_link():
-    message = "글섭 공홈 : https://jp.finalfantasyxiv.com/lodestone/ \n 한섭 공홈 : https://www.ff14.co.kr/main"
+    message = "글섭 공홈 : https://jp.finalfantasyxiv.com/lodestone/ \n한섭 공홈 : https://www.ff14.co.kr/main"
     return message
