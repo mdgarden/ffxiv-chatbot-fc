@@ -39,11 +39,13 @@ def extract_maintenance_post_jp():
             maintenance_url = li.find(
                 "a", {"class": "news__list--link ic__maintenance--list"}
             ).attrs["href"]
+            if (
+                maintenance_url is not None
+                and maintenance_url not in maintenance_url_list
+            ):
+                maintenance_url_list.append(maintenance_url)
         except:
             pass
-
-        if maintenance_url is not None and maintenance_url not in maintenance_url_list:
-            maintenance_url_list.append(maintenance_url)
 
     if len(maintenance_url_list) >= 1:
         for link in maintenance_url_list:
@@ -72,7 +74,7 @@ def extract_maintenance_post_jp():
     else:
         message = "글섭의 최신 점검관련 공지가 없습니다."
 
-    return message
+    print(message)
 
 
 def extract_maintenance_post_kr():
@@ -106,3 +108,6 @@ def extract_character_profile(info):
         + character_url
     )
     return character_information
+
+
+extract_maintenance_post_jp()
