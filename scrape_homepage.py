@@ -74,7 +74,7 @@ def extract_maintenance_post_jp():
     else:
         message = "글섭의 최신 점검관련 공지가 없습니다."
 
-    print(message)
+    return message
 
 
 def extract_maintenance_post_kr():
@@ -108,6 +108,3 @@ def extract_character_profile(info):
         + character_url
     )
     return character_information
-
-
-extract_maintenance_post_jp()
