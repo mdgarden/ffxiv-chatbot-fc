@@ -14,3 +14,12 @@ TWITTER_BEARER_TOKEN = "AAAAAAAAAAAAAAAAAAAAAJX2KgEAAAAASqvQIw2Yrho24l6LW%2Btpmb
 TWITTER_APP_ID = "19592853"
 TWITTER_ACCESS_TOKEN = "722591523401900032-t1iwwUyND50K9bnv7Xh5SYbYyTwAnpr"
 TWITTER_ACCESS_TOKEN_SECRET = "Atw8VuV7r3SfOqNgSc1Rd3vmyeQ2PJuWIm0jgpeCUam2K"
+
+
+## 에러 내용 정리
+"""
+1. wsl을 통해서 브라우저가 열리는걸 확인하려면 X서버가 필수적으로 구동되어야하는데 딱 한번 구동된 이후로 구동되지않음
+2. webdriver_manager를 못찾아서 실행이 안됨. 수동으로 웹드라이버를 다운받는 수밖에 없을듯
+3. 윈도우에서 리눅스 터미널을 쓸 수 있는건 좋지만 결국 가상머신이라는 점에서 많은 기능이 제한적일 수 밖에 없다. 일단은 설치해둔건 냅두고 원래 윈도우로 돌아가는 방안을 찾아야할듯
+4. 파이챰 도입도 검토 중, 기타 다른 파이썬 관련 툴이 있는지 확인
+"""
