@@ -65,3 +65,6 @@ if len(args) == 3:
         print "Invalid syntax. Please read the docs at https://github.com/daxeel/Twilert"
 else:
     print "Invalid arguments passed. Please read the docs at https://github.com/daxeel/Twilert"
+
+
+# check
