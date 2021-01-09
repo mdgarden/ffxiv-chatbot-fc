@@ -4,6 +4,6 @@
 
 #### 🎨Features layout
 
-- [ ] Search Items in FFXIV DB
+- [x] Search Items in FFXIV DB
 - [ ] Notice Maintenance, Mog Station Updates, Events, forums, etc.
 - [x] Get personal schedule and information by Lodestone

@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.utils import ChromeType
 
 
 TARTO_URL = "https://ff14.tar.to/item"
@@ -13,9 +14,12 @@ TARTO_URL = "https://ff14.tar.to/item"
 
 
 def search_tarto(keyword):
+    keyword = keyword[1:]
     options = Options()
     options.add_argument("--headless")
-    browser = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    browser = webdriver.Chrome(
+        ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install(), options=options
+    )
 
     browser.get(TARTO_URL + "/list")
     search_bar = browser.find_element_by_class_name(
@@ -38,19 +42,18 @@ def search_tarto(keyword):
     try:
         item_name_en = item_name_lang[0].get_attribute("innerHTML")
         item_name_jp = item_name_lang[2].get_attribute("innerHTML")
+        message = (
+            "KR : "
+            + item_name
+            + "\n"
+            + "EN : "
+            + item_name_en
+            + "\n"
+            + "JP : "
+            + item_name_jp
+        )
     except:
-        pass
-
-    message = (
-        "KR : "
-        + item_name
-        + "\n"
-        + "EN : "
-        + item_name_en
-        + "\n"
-        + "JP : "
-        + item_name_jp
-    )
+        message = "오류가 발생했습니다."
 
     browser.quit()
     return message
