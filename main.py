@@ -55,7 +55,7 @@ def handle_message(event):
     if user_message[0:1] == "@":
         response_content = find_command(user_message)
     elif user_message[0:1] == "!":
-        # response_content = search_tarto(user_message)
+        response_content = search_tarto(user_message)
         pass
 
     # ToDO:response content리스트로 바꾸고 for문으로 돌리기
