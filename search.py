@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
+from chromedriver_py import binary_path
 
 
 TARTO_URL = "https://ff14.tar.to/item"
@@ -17,9 +18,9 @@ def search_tarto(keyword):
     keyword = keyword[1:]
     options = Options()
     options.add_argument("--headless")
-    browser = webdriver.Chrome(
-        ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install(), options=options
-    )
+    browser = webdriver.Chrome(executable_path=binary_path, options=options)
+    #     ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install(), options=options
+    # )
 
     browser.get(TARTO_URL + "/list")
     search_bar = browser.find_element_by_class_name(

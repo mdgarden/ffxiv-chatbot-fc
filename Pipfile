@@ -16,6 +16,7 @@ lxml = "*"
 tweepy = "*"
 selenium = "*"
 webdriver-manager = "*"
+chromedriver-py = "*"
 
 [requires]
 python_version = "3.8"
