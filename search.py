@@ -27,11 +27,13 @@ TARTO_URL = "https://ff14.tar.to/item"
 def search_tarto(keyword):
     keyword = keyword[1:]
     chrome_options = Options()
-    chrome_options.binary_location = GOOGLE_CHROME_BIN
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--headless")
     browser = webdriver.Chrome(
-        executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options
+        executable_path=str(os.environ.get("CHROMEDRIVER_PATH")),
+        chrome_options=chrome_options,
     )
     #     ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install(), options=options
     # )
