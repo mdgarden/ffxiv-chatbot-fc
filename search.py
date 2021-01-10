@@ -13,8 +13,6 @@ import requests
 import json
 from bs4 import BeautifulSoup
 
-os.environ["GOOGLE_CHROME_BIN"] = "/app/.apt/usr/bin/google-chrome"
-os.environ["CHROMEDRIVER_PATH"] = "/app/.chromedriver/bin/chromedriver"
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36"
@@ -80,3 +78,6 @@ def search_tarto(keyword):
 # 타르토맛에서 검색결과 없을시 ff14 공식 DB에서 검색
 # 둘 다 없을 시 아이템 이름 재확인 요청
 # 타르토맛에 결과가 있으면 한/일/영문 템이름 표시하고 해당 템 링크 전송
+
+
+# : selenium.common.exceptions.WebDriverException: Message: 'chromedriver' executable needs to be in PATH. Please see https://sites.google.com/a/chromium.org/chromedriver/home
