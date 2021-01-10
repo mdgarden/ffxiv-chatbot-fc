@@ -13,11 +13,13 @@ TARTO_SEARCH = "/list/?redirect=true&quick-search-option=item&keyword="
 TARTO_VIEW = "/view/"
 FFXIV_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
 
+# keyword = "カブスの肉"
+
 
 def get_soup(url):
     request = requests.get(url, headers=headers)
     soup = BeautifulSoup(request.text, "html.parser")
-    time.sleep(0.5)
+    time.sleep(1)
     return soup
 
 
@@ -39,6 +41,7 @@ def search_tarto(keyword):
     try:
         item_name_lang = get_soup(item_link).find("div", {"id": "item-name-lang"}).text
         item_name_kr = get_soup(item_link).find("div", {"id": "item-name"}).text
+        item_name_kr = item_name_kr[:-2]
     except:
         item_name_lang = ""
         item_name_kr = ""
@@ -54,6 +57,7 @@ def search_keyword():
     pass
 
 
+# search_tarto(keyword)
 # import time
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
