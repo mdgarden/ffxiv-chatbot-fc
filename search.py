@@ -26,8 +26,6 @@ TARTO_URL = "https://ff14.tar.to/item"
 
 def search_tarto(keyword):
     keyword = keyword[1:]
-    options = Options()
-    options.add_argument("--headless")
     chrome_options = Options()
     chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--disable-gpu")
