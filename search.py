@@ -38,7 +38,6 @@ def search_jp_db(keyword):
 
 
 def search_tarto(keyword):
-    message = ""
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--disable-gpu")
@@ -56,32 +55,22 @@ def search_tarto(keyword):
     search_bar.send_keys(keyword)
     search_bar.send_keys(Keys.ENTER)
     time.sleep(0.5)
-    item_link = browser.find_element_by_css_selector("div.item-name > a").get_attribute(
-        "href"
-    )
-    browser.get(item_link)
     try:
+        item_link = browser.find_element_by_css_selector(
+            "div.item-name > a"
+        ).get_attribute("href")
+        browser.get(item_link)
         item_name = browser.find_element_by_css_selector(
             "div[id^='item-name'] > span"
         ).get_attribute("innerHTML")
         item_name_lang = browser.find_elements_by_css_selector(
             "div[id^='item-name-lang'] > span"
         )
-    except:
-        message = "검색결과가 없습니다."
-
-    if item_name_lang is not None:
         try:
             item_name_en = item_name_lang[0].get_attribute("innerHTML")
             item_name_jp = item_name_lang[2].get_attribute("innerHTML")
             jp_link = search_jp_db(item_name_jp)
-        except:
-            item_name_en = ""
-            item_name_jp = ""
-            jp_link = ""
-
-    if message is None:
-        message = (
+            message = (
             keyword + "의 검색결과" + "\n"
             "한: "
             + item_name
@@ -96,6 +85,8 @@ def search_tarto(keyword):
             + "\n"
             + jp_link
         )
+    except:
+        message = "오류가 발생했습니다."
 
     browser.quit()
     return message
