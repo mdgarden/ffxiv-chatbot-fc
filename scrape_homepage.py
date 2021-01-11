@@ -14,6 +14,7 @@ LODESTONE = "/lodestone"
 CHARACTER = "/character"
 FFXIV_KR_URL = "https://www.ff14.co.kr"
 NOTICE = "/news/notice?category=2"
+FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
 
 
 def get_soup(url):
@@ -108,3 +109,7 @@ def extract_character_profile(info):
         + character_url
     )
     return character_information
+
+
+def search_db(keyword):
+    get_soup(FFXIV_JP_DB_URL + keyword)
