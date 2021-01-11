@@ -55,6 +55,7 @@ def handle_message(event):
     if user_message[0:1] == "@":
         response_content = find_command(user_message)
     elif user_message[0:1] == "!":
+        user_message = user_message[1:]
         response_content = search_tarto(user_message)
         pass
 
