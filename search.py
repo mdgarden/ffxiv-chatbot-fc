@@ -63,15 +63,15 @@ def search_tarto(keyword):
         item_name = browser.find_element_by_css_selector(
             "div[id^='item-name'] > span"
         ).get_attribute("innerHTML")
+
         item_name_lang = browser.find_elements_by_css_selector(
             "div[id^='item-name-lang'] > span"
         )
-
         item_name_en = item_name_lang[0].get_attribute("innerHTML")
         item_name_jp = item_name_lang[2].get_attribute("innerHTML")
         jp_link = search_jp_db(item_name_jp)
         message = (
-            keyword + "의 검색결과" + "\n"
+            keyword + "의 검색결과" + "\n\n"
             "한: "
             + item_name
             + "\n"
@@ -82,7 +82,7 @@ def search_tarto(keyword):
             + item_name_jp
             + "\n\n"
             + item_link
-            + "\n"
+            + "\n\n"
             + jp_link
         )
     except:
