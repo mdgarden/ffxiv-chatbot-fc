@@ -20,6 +20,8 @@ TARTO_URL = "https://ff14.tar.to/item"
 FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
 
+message = ""
+
 
 def get_soup(url):
     request = requests.get(url, headers=headers)
@@ -77,6 +79,7 @@ def search_tarto(keyword):
         except:
             item_name_en = ""
             item_name_jp = ""
+            jp_link = ""
 
     if message is None:
         message = (
