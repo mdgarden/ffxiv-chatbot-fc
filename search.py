@@ -20,8 +20,6 @@ TARTO_URL = "https://ff14.tar.to/item"
 FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
 
-message = ""
-
 
 def get_soup(url):
     request = requests.get(url, headers=headers)
@@ -40,6 +38,7 @@ def search_jp_db(keyword):
 
 
 def search_tarto(keyword):
+    message = ""
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--disable-gpu")
