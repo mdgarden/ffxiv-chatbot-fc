@@ -11,7 +11,7 @@ command_list = {
     },
     "@교수님": {"category": "character", "name": "Meetra Surik", "profile": "14369815"},
     "@로딩": {"category": "character", "name": "Cilia Aden", "profile": "25206858"},
-    "@공홈": {"category": "link"},
+    "@링크": {"category": "link"},
     "@타타루": {"category": "manual"},
 }
 
@@ -42,5 +42,5 @@ def send_manual():
 
 
 def send_link():
-    message = "글섭 공홈 : https://jp.finalfantasyxiv.com/lodestone/ \n한섭 공홈 : https://www.ff14.co.kr/main"
+    message = "글섭 공홈 : https://jp.finalfantasyxiv.com/lodestone/ \n한섭 공홈 : https://www.ff14.co.kr/main \n지름신 강림 : https://store.jp.square-enix.com/item_list.html?sale_cd=1#SERIES=11&pointercat=SERIES"
     return message
