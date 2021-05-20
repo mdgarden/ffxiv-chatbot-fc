@@ -55,45 +55,31 @@ def search_tarto(keyword):
     search_bar.send_keys(keyword)
     search_bar.send_keys(Keys.ENTER)
     time.sleep(0.5)
-    item_link = browser.find_element_by_css_selector("div.item-name > a").get_attribute(
-        "href"
-    )
-    browser.get(item_link)
     try:
-        item_name = browser.find_element_by_css_selector(
-            "div[id^='item-name'] > span"
-        ).get_attribute("innerHTML")
-        item_name_lang = browser.find_elements_by_css_selector(
-            "div[id^='item-name-lang'] > span"
-        )
+        item_link = browser.find_element_by_css_selector(
+            "div.item-name > a"
+        ).get_attribute("href")
+        browser.get(item_link)
     except:
         message = "검색결과가 없습니다."
 
-    if item_name_lang is not None:
-        try:
-            item_name_en = item_name_lang[0].get_attribute("innerHTML")
-            item_name_jp = item_name_lang[2].get_attribute("innerHTML")
-            jp_link = search_jp_db(item_name_jp)
-        except:
-            item_name_en = ""
-            item_name_jp = ""
+    try:
+        # 아이템 한국어명 취득
+        item_name = browser.find_element_by_css_selector(
+            "div[id^='item-name'] > span"
+        ).get_attribute("innerHTML")
 
-    if message is None:
-        message = (
-            keyword + "의 검색결과" + "\n"
-            "한: "
-            + item_name
-            + "\n"
-            + "EN: "
-            + item_name_en
-            + "\n"
-            + "日: "
-            + item_name_jp
-            + "\n\n"
-            + item_link
-            + "\n"
-            + jp_link
+        # 아이템 글로벌명 취득
+        item_name_lang = browser.find_elements_by_css_selector(
+            "div[id^='item-name-lang'] > span"
         )
+        item_name_en = item_name_lang[0].get_attribute("innerHTML")
+        item_name_jp = item_name_lang[2].get_attribute("innerHTML")
+        jp_link = search_jp_db(item_name_jp)
+        message = f'→"{keyword}"의 검색결과 : \n\n・{item_name}\n{item_link}\n\n・{item_name_jp}\n{jp_link}\n\n・{item_name_en}'
+
+    except:
+        message = "오류가 발생했습니다."
 
     browser.quit()
     return message
