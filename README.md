@@ -9,7 +9,8 @@
 - [x] Get personal schedule and information by Lodestone
 
 #### 테스트 방법
-1. 반드시 현재 브랜치가 '''linkshell_dev'''인지 확인할 것
-2. '''ngrok http 3000''' 실행
+1. 반드시 현재 브랜치가 **linkshell_dev**인지 확인할 것
+2. **ngrok http 9000** 실행 *app.py의 PORT주소와 맞출 것*
 3. 라인 개발자 콘솔  → 테스트봇 웹훅 주소에 Forwarding 주소 입력
 4. ngrok 서버 유효시간 1시간
+5. app.py / config.py는 커밋하지말 것
