@@ -4,7 +4,6 @@ import os
 # import tweepy
 from flask import Flask, request, abort
 
-
 from command import find_command
 from search import search_tarto
 from linebot import LineBotApi, WebhookHandler
@@ -59,7 +58,7 @@ def handle_message(event):
         response_content = search_tarto(user_message)
         pass
 
-    # ToDO:response content리스트로 바꾸고 for문으로 돌리기
+    # TODO:response content리스트로 바꾸고 for문으로 돌리기
     if response_content != "":
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=response_content)
