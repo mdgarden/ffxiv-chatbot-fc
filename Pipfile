@@ -17,6 +17,7 @@ tweepy = "*"
 selenium = "*"
 webdriver-manager = "*"
 chromedriver-py = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.9"

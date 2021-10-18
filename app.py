@@ -1,10 +1,9 @@
-import config
 import os
+import sys
 
-# import tweepy
 from flask import Flask, request, abort
 
-
+from dotenv import load_dotenv
 from command import find_command
 from search import search_tarto
 from linebot import LineBotApi, WebhookHandler
@@ -15,10 +14,23 @@ from linebot.models import (
     TextSendMessage,
 )
 
+# take environment variables from .env
+load_dotenv()
+
 app = Flask(__name__)
 
-line_bot_api = LineBotApi(config.CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(config.CHANNEL_SECRET)
+# get channel_secret and channel_access_token from your environment variable
+channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
+channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+if channel_secret is None:
+    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    sys.exit(1)
+if channel_access_token is None:
+    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    sys.exit(1)
+
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
 
 
 @app.route("/")
@@ -68,5 +80,6 @@ def handle_message(event):
 
 if __name__ == "__main__":
     # app.run()
+    os.environ['PORT'] = "9000" # Delete on Production
     port = int(os.getenv("PORT"))
     app.run(host="0.0.0.0", port=port)
