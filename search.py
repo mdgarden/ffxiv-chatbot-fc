@@ -39,16 +39,16 @@ def search_jp_db(keyword):
 
 def search_tarto(keyword):
     chrome_options = Options()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--headless")
     browser = webdriver.Chrome(
-        executable_path=str(os.environ.get("CHROMEDRIVER_PATH")),
+        executable_path=str(os.getenv("CHROMEDRIVER_PATH")),
         chrome_options=chrome_options,
     )
     browser.get(TARTO_URL + "/list")
-
+    print(browser.session_id)
     search_bar = browser.find_element_by_class_name(
         "search-section"
     ).find_element_by_tag_name("input")
