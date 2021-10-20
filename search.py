@@ -38,6 +38,7 @@ def search_jp_db(keyword):
 
 
 def search_tarto(keyword):
+    # TODO: executable_path 오류 해결(무슨 이유에서인지 크롬드라이버의 패스가 정확하지않음)
     chrome_options = Options()
     chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--disable-gpu")
