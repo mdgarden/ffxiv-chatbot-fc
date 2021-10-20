@@ -17,8 +17,23 @@ headers = {
 }
 
 TARTO_URL = "https://ff14.tar.to/item"
-FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
+FFXIV_LS_DB = "/lodestone/playguide/db/search/?q="
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
+FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
+
+global browser
+
+def open_browser():
+    chrome_options = Options()
+    chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--headless")
+    browser = webdriver.Chrome(
+        executable_path=str(os.getenv("CHROMEDRIVER_PATH")),
+        chrome_options=chrome_options,
+    )
+    return browser
 
 
 def get_soup(url):
@@ -29,27 +44,27 @@ def get_soup(url):
 
 def search_jp_db(keyword):
     jp_db_item_link = (
-        get_soup(FFXIV_JP_DB_URL + keyword)
+        get_soup(FFXIV_JP_URL + FFXIV_LS_DB + keyword)
         .find("a", {"class": "db_popup db-table__txt--detail_link"})
         .attrs["href"]
     )
     jp_db_item_link = FFXIV_JP_URL + jp_db_item_link
     return jp_db_item_link
 
+def search_na_db(keyword):
+    na_db_item_link = (
+        get_soup(FFXIV_NA_URL + FFXIV_LS_DB + keyword)
+        .find("a", {"class": "db_popup db-table__txt--detail_link"})
+        .attrs["href"]
+    )
+    na_db_item_link = FFXIV_JP_URL + na_db_item_link
+    return na_db_item_link
 
 def search_tarto(keyword):
-    # TODO: executable_path 오류 해결(무슨 이유에서인지 크롬드라이버의 패스가 정확하지않음)
-    chrome_options = Options()
-    chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--headless")
-    browser = webdriver.Chrome(
-        executable_path=str(os.getenv("CHROMEDRIVER_PATH")),
-        chrome_options=chrome_options,
-    )
+    # TODO: 브라우저를 열고 닫지않고 그냥 계속 켜두는 방법
+    browser = open_browser()
     browser.get(TARTO_URL + "/list")
-    print(browser.session_id)
+    
     search_bar = browser.find_element_by_class_name(
         "search-section"
     ).find_element_by_tag_name("input")
@@ -74,10 +89,11 @@ def search_tarto(keyword):
         item_name_lang = browser.find_elements_by_css_selector(
             "div[id^='item-name-lang'] > span"
         )
-        item_name_en = item_name_lang[0].get_attribute("innerHTML")
+        item_name_na = item_name_lang[0].get_attribute("innerHTML")
         item_name_jp = item_name_lang[2].get_attribute("innerHTML")
         jp_link = search_jp_db(item_name_jp)
-        message = f'→"{keyword}"의 검색결과 : \n\n・{item_name}\n{item_link}\n\n・{item_name_jp}\n{jp_link}\n\n・{item_name_en}'
+        na_link = search_na_db(item_name_na)
+        message = f'→"{keyword}"의 검색결과 : \n\n・{item_name}\n{item_link}\n\n・{item_name_jp}\n{jp_link}\n\n・{item_name_na}\n・{na_link}'
 
     except:
         message = "오류가 발생했습니다."

@@ -12,6 +12,7 @@ from linebot.models import (
     MessageEvent,
     TextMessage,
     TextSendMessage,
+    SourceGroup, SourceRoom,
 )
 
 # take environment variables from .env
@@ -70,6 +71,19 @@ def handle_message(event):
         user_message = user_message[1:]
         response_content = search_tarto(user_message)
         pass
+    elif user_message == 'bye':
+        if isinstance(event.source, SourceGroup):
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text='Leaving group'))
+            line_bot_api.leave_group(event.source.group_id)
+        elif isinstance(event.source, SourceRoom):
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text='Leaving group'))
+            line_bot_api.leave_room(event.source.room_id)
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="Bot can't leave from 1:1 chat"))
 
     # ToDO:response content리스트로 바꾸고 for문으로 돌리기
     if response_content != "":
