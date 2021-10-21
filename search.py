@@ -16,12 +16,11 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36"
 }
 
-TARTO_URL = "https://ff14.tar.to/item"
+TARTO_URL = "https://ff14.tar.to/item/list?keyword="
 FFXIV_LS_DB = "/lodestone/playguide/db/search/?q="
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
 FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
 
-global browser
 
 def open_browser():
     chrome_options = Options()
@@ -57,20 +56,14 @@ def search_na_db(keyword):
         .find("a", {"class": "db_popup db-table__txt--detail_link"})
         .attrs["href"]
     )
-    na_db_item_link = FFXIV_JP_URL + na_db_item_link
+    na_db_item_link = FFXIV_NA_URL + na_db_item_link
     return na_db_item_link
 
 def search_tarto(keyword):
     # TODO: 브라우저를 열고 닫지않고 그냥 계속 켜두는 방법
     browser = open_browser()
-    browser.get(TARTO_URL + "/list")
+    browser.get(TARTO_URL + keyword)
     
-    search_bar = browser.find_element_by_class_name(
-        "search-section"
-    ).find_element_by_tag_name("input")
-    search_bar.send_keys(keyword)
-    search_bar.send_keys(Keys.ENTER)
-    time.sleep(0.5)
     try:
         item_link = browser.find_element_by_css_selector(
             "div.item-name > a"
@@ -94,9 +87,8 @@ def search_tarto(keyword):
         jp_link = search_jp_db(item_name_jp)
         na_link = search_na_db(item_name_na)
         message = f'→"{keyword}"의 검색결과 : \n\n・{item_name}\n{item_link}\n\n・{item_name_jp}\n{jp_link}\n\n・{item_name_na}\n・{na_link}'
-
     except:
         message = "오류가 발생했습니다."
 
-    browser.quit()
+    browser.close()
     return message
