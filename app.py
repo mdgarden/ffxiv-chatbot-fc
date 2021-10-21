@@ -36,7 +36,7 @@ handler = WebhookHandler(channel_secret)
 
 @app.route("/")
 def hello_world():
-    return "hello world!"
+    return "Application is Running!"
 
 
 @app.route("/callback", methods=["POST"])
@@ -93,7 +93,5 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-    # app.run()
-    # os.environ['PORT'] = "9000" # Delete on Production
     port = int(os.getenv("PORT"))
     app.run(host="0.0.0.0", port=port)
