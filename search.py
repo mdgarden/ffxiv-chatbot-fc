@@ -25,6 +25,8 @@ item_search_result = {
     "na_link": "",
 }
 
+# TODO: 클래스화
+
 
 def open_browser():
     chrome_options = Options()
@@ -67,7 +69,7 @@ def search_na_db(keyword):
     return na_db_item_link
 
 
-def search_tarto(keyword):
+def search_items(keyword):
     # TODO: 브라우저를 열고 닫지않고 그냥 계속 켜두는 방법
     browser = open_browser()
     browser.get(TARTO_URL + keyword)
