@@ -88,7 +88,7 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="Bot can't leave from 1:1 chat")
             )
 
-    # ToDO:response content리스트로 바꾸고 for문으로 돌리기
+    # TODO:response content리스트로 바꾸고 for문으로 돌리기
     if response_content != "":
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=response_content)

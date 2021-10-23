@@ -21,11 +21,17 @@ item_search_result = {
     "kr_link": "",
     "jp_name": "",
     "jp_link": "",
-    "na_name": "",
-    "na_link": "",
+    "en_name": "",
+    "en_link": "",
+    "is_spoiler": False,
 }
 
 # TODO: 클래스화
+# 한글인지 일본어인지 구분
+# 한글이면 한글 json에서, 그 외라면 전체 목록에서 검색
+# 정확하게 일치하는 항목이 있으면 그 항목만 기존 방식대로 3언어로 돌려주기
+# 만약 한글 일치항목이 없으면 스포일러 처리
+# 여러 항목 있으면 전체 일치 항목과 상위 5건만 보여주기
 
 
 def open_browser():
@@ -94,16 +100,16 @@ def search_items(keyword):
             "div[id^='item-name-lang'] > span"
         )
         item_search_result["ja_name"] = item_name_lang[2].get_attribute("innerHTML")
-        item_search_result["na_name"] = item_name_lang[0].get_attribute("innerHTML")
+        item_search_result["en_name"] = item_name_lang[0].get_attribute("innerHTML")
         item_search_result["jp_link"] = search_jp_db(item_search_result["ja_name"])
-        item_search_result["na_link"] = search_na_db(item_search_result["na_name"])
+        item_search_result["en_link"] = search_na_db(item_search_result["en_name"])
         return
     except:
         message = "오류가 발생했습니다."
 
 
 def result_message(items):
-    message = f'→"{items}"의 검색결과 : \n\n・{item_search_result["kr_name"]}\n{item_search_result["kr_link"]}\n\n・{item_search_result["ja_name"]}\n{item_search_result["jp_link"]}\n\n・{item_search_result["na_name"]}\n・{item_search_result["na_link"]}'
+    message = f'→"{items}"의 검색결과 : \n\n・{item_search_result["kr_name"]}\n{item_search_result["kr_link"]}\n\n・{item_search_result["ja_name"]}\n{item_search_result["jp_link"]}\n\n・{item_search_result["en_name"]}\n・{item_search_result["en_link"]}'
     return message
 
     # browser.close()
