@@ -1,6 +1,7 @@
 import os
 import requests
 import re
+import json
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -14,7 +15,7 @@ FFXIV_LS_DB = "/lodestone/playguide/db/search/?q="
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
 FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
 
-hangul = re.compile("[^ \u3131-\u3163\uac00-\ud7a3]+")  # 한글만 추출하는 정규식
+extract_hangul = re.compile("[^ \u3131-\u3163\uac00-\ud7a3]+")  # 한글만 추출하는 정규식
 
 item_search_result = {
     "kr_name": "",
@@ -25,13 +26,6 @@ item_search_result = {
     "en_link": "",
     "is_spoiler": False,
 }
-
-# TODO: 클래스화
-# 한글인지 일본어인지 구분
-# 한글이면 한글 json에서, 그 외라면 전체 목록에서 검색
-# 정확하게 일치하는 항목이 있으면 그 항목만 기존 방식대로 3언어로 돌려주기
-# 만약 한글 일치항목이 없으면 스포일러 처리
-# 여러 항목 있으면 전체 일치 항목과 상위 5건만 보여주기
 
 
 def open_browser():
@@ -75,7 +69,7 @@ def search_na_db(keyword):
     return na_db_item_link
 
 
-def search_items(keyword):
+def search_tarto(keyword):
     # TODO: 브라우저를 열고 닫지않고 그냥 계속 켜두는 방법
     browser = open_browser()
     browser.get(TARTO_URL + keyword)
@@ -114,3 +108,27 @@ def result_message(items):
 
     # browser.close()
     return message
+
+
+# TODO: 클래스화
+# 한글인지 일본어인지 구분
+# 한글이면 한글 json에서, 그 외라면 전체 목록에서 검색
+# 정확하게 일치하는 항목이 있으면 그 항목만 기존 방식대로 3언어로 돌려주기
+# 만약 한글 일치항목이 없으면 스포일러 처리
+# 여러 항목 있으면 전체 일치 항목과 상위 5건만 보여주기
+
+
+class Search:
+
+    with open("/src/assets/data/items.json", "r") as f:
+        item_data = json.load(f)
+    with open("/src/assets/data/ko-items.json", "r") as f:
+        ko_item_data = json.load(f)
+
+    # 검색어 초기화
+    def __init__(self, keyword):
+        self.keyword = keyword
+
+    def search_items(keyword):
+        # 완전일치, 부분일치 넣기
+        pass
