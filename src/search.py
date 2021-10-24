@@ -125,10 +125,25 @@ class Search:
     with open("/src/assets/data/ko-items.json", "r") as f:
         ko_item_data = json.load(f)
 
-    # 검색어 초기화
+    item_response = {
+        id: "",
+        "kr": {"name": "", "url": ""},
+        "jp": {"name": "", "url": ""},
+        "en": {"name": "", "url": ""},
+    }
+
+    # 검색어, 리스폰스 초기화
     def __init__(self, keyword):
         self.keyword = keyword
 
-    def search_items(keyword):
+    def search_items(self, keyword):
         # 완전일치, 부분일치 넣기
+        # 한국어가 아니라면 전체 아이템 검색
+        if extract_hangul.findall(keyword) is None:
+            if keyword in self.item_data:
+                # list(map(lambda x:x if x["id_number"]=="cz1093", self.item_data)
+                pass
+        else:
+            if keyword in self.ko_item_data:
+                pass
         pass
