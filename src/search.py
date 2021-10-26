@@ -15,8 +15,9 @@ FFXIV_LS_DB = "/lodestone/playguide/db/search/?q="
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
 FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
 
-extract_hangul = re.compile("[^ \u3131-\u3163\uac00-\ud7a3]+")  # 한글만 추출하는 정규식
-
+# compile의 리턴값은 문자열이 아닌 클래스 참고 : https://nachwon.github.io/regular-expressions/ 
+extract_hangul = re.compile("[\u3131-\u3163\uac00-\ud7a3]+")  # 한글만 추출하는 정규식
+extract_hiragana = re.compile("[ぁ-んァ-ン 一-龥]+")  # 히라가나, 가타카나, 한자 추출
 item_search_result = {
     "kr_name": "",
     "kr_link": "",
@@ -132,13 +133,14 @@ class Search:
         "en": {"name": "", "url": ""},
     }
 
-    # 검색어, 리스폰스 초기화
+    # 리스폰스 초기화`
     def __init__(self, keyword):
         self.keyword = keyword
 
     def search_items(self, keyword):
         # 완전일치, 부분일치 넣기
         # 한국어가 아니라면 전체 아이템 검색
+        # TODO: 특수문자 체크
         if extract_hangul.findall(keyword) is None:
             if keyword in self.item_data:
                 # list(map(lambda x:x if x["id_number"]=="cz1093", self.item_data)
