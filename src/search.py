@@ -130,12 +130,12 @@ class Search:
 
     item_response = {
         id: "",
-        "kr": {"name": "", "url": ""},
-        "jp": {"name": "", "url": ""},
-        "en": {"name": "", "url": ""},
+        "kr": {"name": "", "id": ""},
+        "jp": {"name": "", "id": ""},
+        "en": {"name": "", "id": ""},
     }
 
-    # 리스폰스 초기화`
+    # 리스폰스 초기화
     def __init__(self, keyword):
         self.keyword = keyword
 
@@ -143,15 +143,15 @@ class Search:
         # check language
         if self.keyword.extract_hangul:
             self.locale = "kr"
-            self.item_list = self.ko_item_data
+            self.is_global = False
         elif self.keyword.extract_hiragana:
             self.locale = "ja"
-            self.item_list = self.item_data
+            self.is_global = True
         elif self.keyword.extract_meta:
             self.loacle = "meta"
         else:
             self.locale = "en"
-            self.item_list = self.item_data
+            self.is_global = True
 
     def extract_db(self):
         self.set_locale()
@@ -161,12 +161,12 @@ class Search:
             return
         else:
             # 완전일치 검색
-            extract_result = list(
-                filter(lambda x: x[0][self.locale] == self.keyword, self.item_list)
-            )
-            # 부분일치 검색
-            if extract_result is None:
-                pass
+            if self.is_global:
+                for item in self.item_list:
+                    if item[0][self.locale] == self.keyword:
+                        self.item_response[self.locale]["id"] == item[0]
+                        self.item_response[self.locale]["name"] == self.keyword
+                        pass
 
 
 # f = Search(keyword)
