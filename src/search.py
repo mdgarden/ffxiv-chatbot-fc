@@ -1,14 +1,6 @@
-import os
-import requests
 import re
 import json
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36"
-}
 
 TARTO_URL = "https://ff14.tar.to/item/list?keyword="
 FFXIV_LS_DB = "/lodestone/playguide/db/search/?q="
@@ -19,99 +11,6 @@ FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
 extract_hangul = re.compile("[\u3131-\u3163\uac00-\ud7a3]+")  # 한글만 추출하는 정규식
 extract_hiragana = re.compile("[ぁ-んァ-ン 一-龥]+")  # 히라가나, 가타카나, 한자 추출
 extract_meta = re.compile("[-=.#/?:$}]+")  # 특수문자
-
-item_search_result = {
-    "kr_name": "",
-    "kr_link": "",
-    "jp_name": "",
-    "jp_link": "",
-    "en_name": "",
-    "en_link": "",
-    "is_spoiler": False,
-}
-
-
-def open_browser():
-    chrome_options = Options()
-    chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--headless")
-    # 창 안닫는 옵션
-    # chrome_options.add_experimental_option("detach", True)
-    browser = webdriver.Chrome(
-        executable_path=str(os.getenv("CHROMEDRIVER_PATH")),
-        chrome_options=chrome_options,
-    )
-    return browser
-
-
-def get_soup(url):
-    request = requests.get(url, headers=headers)
-    soup = BeautifulSoup(request.text, "html.parser")
-    return soup
-
-
-def search_jp_db(keyword):
-    jp_db_item_link = (
-        get_soup(FFXIV_JP_URL + FFXIV_LS_DB + keyword)
-        .find("a", {"class": "db_popup db-table__txt--detail_link"})
-        .attrs["href"]
-    )
-    jp_db_item_link = FFXIV_JP_URL + jp_db_item_link
-    return jp_db_item_link
-
-
-def search_na_db(keyword):
-    na_db_item_link = (
-        get_soup(FFXIV_NA_URL + FFXIV_LS_DB + keyword)
-        .find("a", {"class": "db_popup db-table__txt--detail_link"})
-        .attrs["href"]
-    )
-    na_db_item_link = FFXIV_NA_URL + na_db_item_link
-    return na_db_item_link
-
-
-def search_tarto(keyword):
-    # TODO: 브라우저를 열고 닫지않고 그냥 계속 켜두는 방법
-    browser = open_browser()
-    browser.get(TARTO_URL + keyword)
-
-    try:
-        item_link = browser.find_element_by_css_selector(
-            "div.item-name > a"
-        ).get_attribute("href")
-        item_search_result["kr_link"] = item_link
-        browser.get(item_link)
-    except:
-        message = "검색결과가 없습니다."
-
-    try:
-        # 아이템 한국어명 취득
-        item_search_result["kr_name"] = browser.find_element_by_css_selector(
-            "div[id^='item-name'] > span"
-        ).get_attribute("innerHTML")
-
-        # 아이템 글로벌명 취득
-        item_name_lang = browser.find_elements_by_css_selector(
-            "div[id^='item-name-lang'] > span"
-        )
-        item_search_result["ja_name"] = item_name_lang[2].get_attribute("innerHTML")
-        item_search_result["en_name"] = item_name_lang[0].get_attribute("innerHTML")
-        item_search_result["jp_link"] = search_jp_db(item_search_result["ja_name"])
-        item_search_result["en_link"] = search_na_db(item_search_result["en_name"])
-        return
-    except:
-        message = "오류가 발생했습니다."
-
-
-def result_message(items):
-    message = f'→"{items}"의 검색결과 : \n\n・{item_search_result["kr_name"]}\n{item_search_result["kr_link"]}\n\n・{item_search_result["ja_name"]}\n{item_search_result["jp_link"]}\n\n・{item_search_result["en_name"]}\n・{item_search_result["en_link"]}'
-    return message
-
-    # browser.close()
-    return message
-
 
 # TODO: 클래스화
 # 한글인지 일본어인지 구분
@@ -128,11 +27,12 @@ class Search:
     with open("/src/assets/data/ko-items.json", "r") as f:
         ko_item_data = json.load(f)
 
-    item_response = {
+    response = {
         id: "",
-        "kr": {"name": "", "id": ""},
-        "jp": {"name": "", "id": ""},
-        "en": {"name": "", "id": ""},
+        "origin_locale": "",
+        "kr": "",
+        "jp": "",
+        "en": "",
     }
 
     # 리스폰스 초기화
@@ -143,15 +43,60 @@ class Search:
         # check language
         if self.keyword.extract_hangul:
             self.locale = "kr"
-            self.is_global = False
+            self.item_list = self.ko_item_data
         elif self.keyword.extract_hiragana:
             self.locale = "ja"
-            self.is_global = True
+            self.item_list = self.item_data
         elif self.keyword.extract_meta:
             self.loacle = "meta"
         else:
             self.locale = "en"
-            self.is_global = True
+            self.item_list = self.item_data
+
+    def switch_locale(self):
+        if self.locale == "ja":
+            self.locale = "en"
+        elif self.locale == "en":
+            self.locale = "ja"
+
+    def switch_list(self):
+        if self.item_list == self.item_data:
+            self.item_list = self.ko_item_data
+
+    def search_perfect_match(self):
+        if self.loacle == "ja" or "en":
+            for item in self.item_list:
+                if item[0][self.locale] == self.keyword:
+                    self.save_global_data(item)
+                    return
+                elif self.keyword in item[0][self.locale]:
+                    self.save_global_data(item)
+
+        else:
+            for item in self.item_list:
+                if item[0][self.locale] == self.keyword:
+                    self.save_kr_data(item)
+
+    def save_global_data(self, item):
+        self.response["id"] == item[0]
+        self.response[self.locale] == self.keyword
+        self.switch_locale()
+        self.response[self.locale] == self.keyword
+        self.switch_list()
+        self.response["kr"] == self.search_item_by_id()
+
+    def save_kr_data(self, item):
+        self.response["id"] == item[0]
+        self.response[self.locale] == self.keyword
+        self.switch_list()
+        self.locale = "ja"
+        self.response["ja"] == self.search_item_by_id()
+        self.locale = "en"
+        self.response["en"] == self.search_item_by_id()
+
+    def search_item_by_id(self):
+        self.item_list[self.response["id"] - 1]
+        pass
 
     def extract_db(self):
         self.set_locale()
@@ -160,13 +105,8 @@ class Search:
         if self.locale == "meta":
             return
         else:
-            # 완전일치 검색
-            if self.is_global:
-                for item in self.item_list:
-                    if item[0][self.locale] == self.keyword:
-                        self.item_response[self.locale]["id"] == item[0]
-                        self.item_response[self.locale]["name"] == self.keyword
-                        pass
+            # 완전일치
+            self.search_perfect_match()
 
 
 # f = Search(keyword)
