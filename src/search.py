@@ -22,25 +22,39 @@ extract_meta = re.compile("[-=.#/?:$}]+")  # 특수문자
 
 class Search:
 
+    # 한국어임
+    # 한국어로 한국어 json을 찾음
+    #
+
     with open("/src/assets/data/items.json", "r") as f:
         item_data = json.load(f)
     with open("/src/assets/data/ko-items.json", "r") as f:
         ko_item_data = json.load(f)
 
     response = {
+        "keyword": "",
+        "keyword_locale": "",
+        "is_updated": False,
+        "item_sets": {},
+    }
+
+    item_value = {
         id: "",
-        "origin_locale": "",
         "kr": "",
         "jp": "",
         "en": "",
     }
 
     # 리스폰스 초기화
+    # keyword = 검색어
     def __init__(self, keyword):
         self.keyword = keyword
+        self.response["keyword"] = self.keyword
 
     def set_locale(self):
         # check language
+        # 로직 다시 체크 : 만약에 한글과 일본어 둘 다 있는 경우에는 어떡함?
+        # 특히 특수문자걸리면 무조건 빠져야하는데 이게 순서가 맞는건지
         if self.keyword.extract_hangul:
             self.locale = "kr"
             self.item_list = self.ko_item_data
@@ -63,11 +77,13 @@ class Search:
         if self.item_list == self.item_data:
             self.item_list = self.ko_item_data
 
+    # 이름은 퍼펙매치인데 내용은 부분일치도 찾고 있음
     def search_perfect_match(self):
         if self.loacle == "ja" or "en":
             for item in self.item_list:
                 if item[0][self.locale] == self.keyword:
                     self.save_global_data(item)
+                    # 완전 일치 항목은 하나밖에 없으므로 찾으면 종료
                     return
                 elif self.keyword in item[0][self.locale]:
                     self.save_global_data(item)
