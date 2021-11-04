@@ -15,28 +15,26 @@ def merge_json(target, source):
     for key in target:
         print(key)
         try:
-            merged_json[key] = target[key].update(source[key])
+            print(target[key] | source[key])
+            merged_json[key] = target[key] | source[key]
         except Exception as ex:
             print(ex)
-            print("passed")
+            print("Not Updated yet")
+            merged_json[key] = target[key]
 
-    # print("merged json files")
-    target.update(source)
-    return target
+    return merged_json
 
 
 def write_json(obj):
     # Serializing json
-    json_object = json.dumps(obj, indent=4)
+    json_object = json.dumps(obj, indent=4, ensure_ascii=False)
 
     # Writing to sample.json
-    with open("sample.json", "w") as outfile:
+    with open("merged_db.json", "w") as outfile:
         outfile.write(json_object)
 
 
 kr_data = parse_json(KR_DB_PATH)
 gb_data = parse_json(GB_DB_PATH)
-
-# merge_json(gb_data, kr_data)
 
 write_json(merge_json(gb_data, kr_data))
