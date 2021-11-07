@@ -3,6 +3,8 @@ import json
 KR_DB_PATH = "src/assets/data/ko-items.json"
 GB_DB_PATH = "src/assets/data/items.json"
 
+# 팀크래프트 DB업데이트 후 한번씩 실행시킬 것
+
 
 def parse_json(path):
     with open(path, "r") as f:
