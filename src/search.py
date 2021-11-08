@@ -1,5 +1,10 @@
 import re
 import json
+import fasttext
+
+
+# Skipgram model :
+
 
 DB_PATH = "src/assets/data/merged_db.json"
 
@@ -14,11 +19,19 @@ extract_hiragana = re.compile("[ぁ-んァ-ン 一-龥]+")  # 히라가나, 가�
 extract_meta = re.compile("[-=.#/?:$}]+")  # 특수문자
 
 # TODO: 클래스화
-# 한글인지 일본어인지 구분
+# 한글인지 일본어인지 구분...할 필요가 있음?
 # 한글이면 한글 json에서, 그 외라면 전체 목록에서 검색
 # 정확하게 일치하는 항목이 있으면 그 항목만 기존 방식대로 3언어로 돌려주기
 # 만약 한글 일치항목이 없으면 스포일러 처리
 # 여러 항목 있으면 전체 일치 항목과 상위 5건만 보여주기
+
+# labels = ja, en, ko
+
+
+def classify_lang(text):
+    model = fasttext.load_model("lid.176.ftz")
+    locale = re.sub("__label__", "", model.predict(text)[0][0])
+    return locale
 
 
 def open_db_json():
@@ -29,3 +42,6 @@ def open_db_json():
 
 def search_db():
     pass
+
+
+print(classify_lang("구식 판금망치"))
