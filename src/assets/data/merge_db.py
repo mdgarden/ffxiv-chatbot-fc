@@ -15,14 +15,12 @@ def parse_json(path):
 def merge_json(target, source):
     merged_json = {}
     for key in target:
-        print(key)
         try:
-            print(target[key] | source[key])
             merged_json[key] = target[key] | source[key]
         except Exception as ex:
             print(ex)
-            print("Not Updated yet")
-            merged_json[key] = target[key]
+            source[key] = {"ko": ""}
+            merged_json[key] = target[key] | source[key]
 
     return merged_json
 

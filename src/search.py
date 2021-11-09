@@ -7,7 +7,6 @@ import fasttext
 
 
 DB_PATH = "src/assets/data/merged_db.json"
-
 TARTO_URL = "https://ff14.tar.to/item/list?keyword="
 FFXIV_LS_DB = "/lodestone/playguide/db/search/?q="
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
@@ -40,8 +39,28 @@ def open_db_json():
     return parsed_json
 
 
-def search_db():
-    pass
+def search_db(keyword):
+    DB = open_db_json()
+    locale = classify_lang(keyword)
+    result = {}
+    for item_num in DB:
+        item_result = {
+            item_num: {
+                "ko": DB[item_num]["ko"],
+                "ja": DB[item_num]["ja"],
+                "en": DB[item_num]["en"],
+            }
+        }
+        if keyword == DB[item_num][locale]:
+            result.update(item_result)
+            return
+
+        elif keyword in DB[item_num][locale]:
+            result.update(item_result)
+    print(result)
 
 
-print(classify_lang("구식 판금망치"))
+# TODO: count partial match
+# TODO: create reply message
+
+search_db("アラガントームストーン")
