@@ -76,7 +76,13 @@ def search_db(keyword):
         elif keyword in DB[item_num][locale]:
             result.append(item_result)
 
-    if len(result) < 3:
+    if len(result) == 0:
+        message = keyword + "의 검색결과가 없습니다. 검색어를 확인해주세요."
+        print(message)
+
+        return message
+
+    elif len(result) < 3:
         message = (
             keyword
             + "의 검색결과입니다. \n총"
@@ -92,6 +98,7 @@ def search_db(keyword):
             + result[len(result) - 1]["words"]["en"]
         )
         return message
+
     else:
         message = (
             keyword
@@ -107,7 +114,11 @@ def search_db(keyword):
             + "③ "
             + result[len(result) - 3]["words"][locale]
         )
+        print(message)
+
         return message
 
 
-search_db("석판")
+search_db("징크스")
+
+# TODO:
