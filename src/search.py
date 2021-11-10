@@ -25,6 +25,7 @@ extract_meta = re.compile("[-=.#/?:$}]+")  # 특수문자
 # 여러 항목 있으면 전체 일치 항목과 상위 5건만 보여주기
 
 # labels = ja, en, ko
+global result
 
 
 def classify_lang(text):
@@ -42,25 +43,71 @@ def open_db_json():
 def search_db(keyword):
     DB = open_db_json()
     locale = classify_lang(keyword)
-    result = {}
+    result = []
+    message = ""
     for item_num in DB:
         item_result = {
-            item_num: {
+            "item_num": item_num,
+            "words": {
                 "ko": DB[item_num]["ko"],
                 "ja": DB[item_num]["ja"],
                 "en": DB[item_num]["en"],
-            }
+            },
         }
+
         if keyword == DB[item_num][locale]:
-            result.update(item_result)
-            return
+            result.append(item_result)
+            message = (
+                keyword
+                + "의 검색결과입니다."
+                + "\n\n"
+                + "Ko : "
+                + result[0]["words"]["ko"]
+                + "\n"
+                + "Ja : "
+                + result[0]["words"]["ja"]
+                + "\n"
+                + "En : "
+                + result[0]["words"]["en"]
+            )
+            print(message)
+            return message
 
         elif keyword in DB[item_num][locale]:
-            result.update(item_result)
-    print(result)
+            result.append(item_result)
+
+    if len(result) < 3:
+        message = (
+            keyword
+            + "의 검색결과입니다. \n총"
+            + str(len(result))
+            + "건의 결과가 있습니다.\n\n====상위 검색 결과====\n\n"
+            + "Ko : "
+            + result[len(result) - 1]["words"]["ko"]
+            + "\n"
+            + "Ja : "
+            + result[len(result) - 1]["words"]["ja"]
+            + "\n"
+            + "En : "
+            + result[len(result) - 1]["words"]["en"]
+        )
+        return message
+    else:
+        message = (
+            keyword
+            + "의 검색결과입니다. \n총"
+            + str(len(result))
+            + "건의 결과에서 상위 목록을 표시합니다.\n\n============\n\n"
+            + "① "
+            + result[len(result) - 1]["words"][locale]
+            + "\n"
+            + "② "
+            + result[len(result) - 2]["words"][locale]
+            + "\n"
+            + "③ "
+            + result[len(result) - 3]["words"][locale]
+        )
+        return message
 
 
-# TODO: count partial match
-# TODO: create reply message
-
-search_db("アラガントームストーン")
+search_db("석판")
