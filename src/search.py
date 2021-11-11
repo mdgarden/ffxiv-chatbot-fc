@@ -47,7 +47,7 @@ def search_db(keyword):
     message = ""
 
     # 특수기호 검출시 작동안함
-    if re.findall("[-=.#/?:$!}]+", keyword):
+    if re.findall("[=#/?$!}]+", keyword):
         return
 
     for item_num in DB:
