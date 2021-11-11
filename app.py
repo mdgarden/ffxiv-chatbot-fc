@@ -4,8 +4,8 @@ import sys
 from flask import Flask, request, abort
 
 from dotenv import load_dotenv
-from command import find_command
-from search import search_db
+from src.command import find_command
+from src.search import search_db
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (

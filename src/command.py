@@ -1,4 +1,4 @@
-from scrape_homepage import extract_maintenance_post_jp, extract_character_profile
+from src.scrape_homepage import extract_maintenance_post_jp, extract_character_profile
 
 command_list = {
     "@점검": {"category": "maintenance"},
