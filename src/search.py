@@ -15,7 +15,7 @@ FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
 # compile의 리턴값은 문자열이 아닌 클래스 참고 : https://nachwon.github.io/regular-expressions/
 extract_hangul = re.compile("[\u3131-\u3163\uac00-\ud7a3]+")  # 한글만 추출하는 정규식
 extract_hiragana = re.compile("[ぁ-んァ-ン 一-龥]+")  # 히라가나, 가타카나, 한자 추출
-extract_meta = re.compile("[-=.#/?:$}]+")  # 특수문자
+# extract_meta = re.findall("[-=.#/?:$}]+") z # 특수문자
 
 # TODO: 클래스화
 # 한글인지 일본어인지 구분...할 필요가 있음?
@@ -45,6 +45,11 @@ def search_db(keyword):
     locale = classify_lang(keyword)
     result = []
     message = ""
+
+    # 특수기호 검출시 작동안함
+    if re.findall("[-=.#/?:$!}]+", keyword):
+        return
+
     for item_num in DB:
         item_result = {
             "item_num": item_num,
@@ -87,7 +92,7 @@ def search_db(keyword):
             keyword
             + "의 검색결과입니다. \n총"
             + str(len(result))
-            + "건의 결과가 있습니다.\n\n====상위 검색 결과====\n\n"
+            + "건의 결과에서 상위 목록을 표시합니다.\n\n============\n\n"
             + "Ko : "
             + result[len(result) - 1]["words"]["ko"]
             + "\n"
@@ -117,8 +122,3 @@ def search_db(keyword):
         print(message)
 
         return message
-
-
-search_db("징크스")
-
-# TODO:

@@ -5,7 +5,7 @@ from flask import Flask, request, abort
 
 from dotenv import load_dotenv
 from command import find_command
-from search import search_items
+from search import search_db
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
@@ -70,7 +70,7 @@ def handle_message(event):
         response_content = find_command(user_message)
     elif user_message[0:1] == "!":
         user_message = user_message[1:]
-        response_content = search_items(user_message)
+        response_content = search_db(user_message)
         pass
     elif user_message == "bye":
         if isinstance(event.source, SourceGroup):
