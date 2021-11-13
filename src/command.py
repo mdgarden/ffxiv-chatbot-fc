@@ -2,6 +2,7 @@ from src.scrape_homepage import extract_maintenance_post_jp, extract_character_p
 
 command_list = {
     "@점검": {"category": "maintenance"},
+    "@공지": {"category": "topics"},
     "@링크": {"category": "link"},
     "@타타루": {"category": "manual"},
 }
@@ -23,8 +24,14 @@ def find_command(command):
             return extract_character_profile(first_command)
         elif category == "manual":
             return send_manual()
+        elif category == "topics":
+            return send_topics()
         else:
             pass
+
+
+def send_topics():
+    pass
 
 
 def send_manual():
