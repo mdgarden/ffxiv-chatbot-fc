@@ -6,7 +6,7 @@ import fasttext
 # Skipgram model :
 
 
-DB_PATH = "src/assets/data/item_db.json"
+DB_PATH = "src/assets/data/items/item_db.json"
 TARTO_URL = "https://ff14.tar.to/item/list?keyword="
 FFXIV_LS_DB = "/lodestone/playguide/db/search/?q="
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"

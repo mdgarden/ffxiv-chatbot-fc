@@ -2,15 +2,6 @@ from src.scrape_homepage import extract_maintenance_post_jp, extract_character_p
 
 command_list = {
     "@점검": {"category": "maintenance"},
-    "@이엣타이가": {"category": "character", "name": "House Tiger", "profile": "23985452"},
-    "@엣탱": {"category": "character", "name": "Alpha Sertan", "profile": "23508489"},
-    "@튜플": {
-        "category": "character",
-        "name": "Tuple Cardinality",
-        "profile": "23240790",
-    },
-    "@교수님": {"category": "character", "name": "Meetra Surik", "profile": "14369815"},
-    "@로딩": {"category": "character", "name": "Cilia Aden", "profile": "25206858"},
     "@링크": {"category": "link"},
     "@타타루": {"category": "manual"},
 }
