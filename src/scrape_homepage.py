@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from linebot.models import CarouselColumn
 
 # from fake_useragent import UserAgent
 
@@ -10,9 +11,10 @@ headers = {
 # ua = UserAgent()
 # header = {'user-agent':ua.chrome}
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
+FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
+FFXIV_KR_URL = "https://www.ff14.co.kr"
 LODESTONE = "/lodestone"
 CHARACTER = "/character"
-FFXIV_KR_URL = "https://www.ff14.co.kr"
 NOTICE = "/news/notice?category=2"
 FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
 
@@ -24,14 +26,87 @@ def get_soup(url):
 
 
 def extract_topic_post():
-    notice_list = (
-        get_soup(FFXIV_JP_URL + LODESTONE)
-        .find("div", {"class": "toptabchanger_newsbox"})
-        .find("ul")
-        .find_all("li", {"class": "news__list"})
+    global topic_title
+    global topic_url_jp
+    global topic_url_en
+    global topic_text
+    global banner_url
+
+    topic_list = get_soup(FFXIV_JP_URL + LODESTONE).find_all(
+        "li", {"class": "news__list--topics"}
     )
-    print(notice_list)
+
+    for li in topic_list:
+        try:
+            topic_title = li.find("p", {"class": "news__list--title"}).get_text()
+            topic_url = li.find("a", {"class": "news__list--img"})["href"]
+            topic_url_jp = FFXIV_JP_URL + topic_url
+            topic_url_en = FFXIV_NA_URL + topic_url
+            topic_text = li.find("p", {"class": "mdl-text__xs-m16"}).get_text()
+            banner_url = li.find("img")["src"]
+        except Exception as ex:
+            print(ex)
     pass
+
+
+def generate_carousel():
+    columns = []
+    for i in range(3):
+        column = CarouselColumn(
+            thumbnail_image_url=banner_url,
+            title=topic_title,
+            text=topic_text,
+            actions=[
+                {
+                    "type": "URI",
+                    "label": "jp",
+                    "uri": "",
+                }
+            ],
+        )
+        columns.append(column)
+
+    notes = [
+        CarouselColumn(
+            thumbnail_image_url="https://renttle.jp/static/img/renttle02.jpg",
+            title="【ReleaseNote】トークルームを実装しました。",
+            text="creation(創作中・考え中の何かしらのモノ・コト)に関して、意見を聞けるようにトークルーム機能を追加しました。",
+            actions=[
+                {
+                    "type": "message",
+                    "label": "サイトURL",
+                    "text": "https://renttle.jp/notes/kota/7",
+                }
+            ],
+        ),
+        CarouselColumn(
+            thumbnail_image_url="https://renttle.jp/static/img/renttle03.jpg",
+            title="ReleaseNote】創作中の活動を報告する機能を追加しました。",
+            text="創作中や考え中の時点の活動を共有できる機能を追加しました。",
+            actions=[
+                {
+                    "type": "message",
+                    "label": "サイトURL",
+                    "text": "https://renttle.jp/notes/kota/6",
+                }
+            ],
+        ),
+        CarouselColumn(
+            thumbnail_image_url="https://renttle.jp/static/img/renttle04.jpg",
+            title="【ReleaseNote】タグ機能を追加しました。",
+            text="「イベントを作成」「記事を投稿」「本を登録」にタグ機能を追加しました。",
+            actions=[
+                {
+                    "type": "message",
+                    "label": "サイトURL",
+                    "text": "https://renttle.jp/notes/kota/5",
+                }
+            ],
+        ),
+    ]
+
+
+extract_topic_post()
 
 
 def extract_maintenance_post_jp():
@@ -56,8 +131,8 @@ def extract_maintenance_post_jp():
                 and maintenance_url not in maintenance_url_list
             ):
                 maintenance_url_list.append(maintenance_url)
-        except:
-            pass
+        except Exception as ex:
+            print(ex)
 
     if len(maintenance_url_list) >= 1:
         for link in maintenance_url_list:
@@ -107,8 +182,10 @@ def extract_character_profile(info):
         character_title = contents.find(
             "p", {"class": "frame__chara__title"}
         ).get_text()
-    except:
+    except Exception as ex:
+        print(ex)
         character_title = ""
+
     character_job = contents.find("div", {"class": "character__class__data"}).get_text()
     character_information = (
         character_title
