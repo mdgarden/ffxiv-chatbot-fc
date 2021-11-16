@@ -1,6 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
-from linebot.models import CarouselColumn
+from linebot.models import (
+    CarouselColumn,
+    CarouselTemplate,
+    TemplateSendMessage,
+    template,
+)
 
 # from fake_useragent import UserAgent
 
@@ -17,6 +22,9 @@ LODESTONE = "/lodestone"
 CHARACTER = "/character"
 NOTICE = "/news/notice?category=2"
 FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
+default_img = (
+    "https://pbs.twimg.com/card_img/1458489866896154624/jBwpzaqT?format=png&name=small"
+)
 
 
 def get_soup(url):
@@ -26,11 +34,7 @@ def get_soup(url):
 
 
 def extract_topic_post():
-    global topic_title
-    global topic_url_jp
-    global topic_url_en
-    global topic_text
-    global banner_url
+    topics = []
 
     topic_list = get_soup(FFXIV_JP_URL + LODESTONE).find_all(
         "li", {"class": "news__list--topics"}
@@ -44,69 +48,53 @@ def extract_topic_post():
             topic_url_en = FFXIV_NA_URL + topic_url
             topic_text = li.find("p", {"class": "mdl-text__xs-m16"}).get_text()
             banner_url = li.find("img")["src"]
+            topic = {
+                "title": topic_title,
+                "jp_url": topic_url_jp,
+                "en_url": topic_url_en,
+                "img_url": banner_url,
+                "text": topic_text,
+            }
+            topics.append(topic)
         except Exception as ex:
             print(ex)
-    pass
+    message = generate_carousel(topics)
+    return message
 
 
-def generate_carousel():
+def generate_carousel(column):
+    """
+    column = {"img_link": "", "title": "", "text": "", "url": ""}
+    """
+
     columns = []
     for i in range(3):
-        column = CarouselColumn(
-            thumbnail_image_url=banner_url,
-            title=topic_title,
-            text=topic_text,
-            actions=[
-                {
-                    "type": "URI",
-                    "label": "jp",
-                    "uri": "",
-                }
-            ],
+        title = column[i]["title"][:39]
+        text = column[i]["text"][:55]
+        columns.append(
+            CarouselColumn(
+                thumbnail_image_url=str(column[i]["img_url"]),
+                title=str(title),
+                text=str(text),
+                actions=[
+                    {
+                        "type": "uri",
+                        "label": "日本語",
+                        "uri": column[i]["jp_url"],
+                    },
+                    {
+                        "type": "uri",
+                        "label": "English",
+                        "uri": column[i]["en_url"],
+                    },
+                ],
+            )
         )
-        columns.append(column)
 
-    notes = [
-        CarouselColumn(
-            thumbnail_image_url="https://renttle.jp/static/img/renttle02.jpg",
-            title="【ReleaseNote】トークルームを実装しました。",
-            text="creation(創作中・考え中の何かしらのモノ・コト)に関して、意見を聞けるようにトークルーム機能を追加しました。",
-            actions=[
-                {
-                    "type": "message",
-                    "label": "サイトURL",
-                    "text": "https://renttle.jp/notes/kota/7",
-                }
-            ],
-        ),
-        CarouselColumn(
-            thumbnail_image_url="https://renttle.jp/static/img/renttle03.jpg",
-            title="ReleaseNote】創作中の活動を報告する機能を追加しました。",
-            text="創作中や考え中の時点の活動を共有できる機能を追加しました。",
-            actions=[
-                {
-                    "type": "message",
-                    "label": "サイトURL",
-                    "text": "https://renttle.jp/notes/kota/6",
-                }
-            ],
-        ),
-        CarouselColumn(
-            thumbnail_image_url="https://renttle.jp/static/img/renttle04.jpg",
-            title="【ReleaseNote】タグ機能を追加しました。",
-            text="「イベントを作成」「記事を投稿」「本を登録」にタグ機能を追加しました。",
-            actions=[
-                {
-                    "type": "message",
-                    "label": "サイトURL",
-                    "text": "https://renttle.jp/notes/kota/5",
-                }
-            ],
-        ),
-    ]
-
-
-extract_topic_post()
+    return TemplateSendMessage(
+        alt_text="template",
+        template=CarouselTemplate(columns=columns, image_size="contain"),
+    )
 
 
 def extract_maintenance_post_jp():
@@ -145,18 +133,12 @@ def extract_maintenance_post_jp():
                 "div", {"class": "news__detail__wrapper"}
             ).get_text()
             maintenance_time = maintenance_contents.find("日　時")
-            list_message = (
-                str(num)
-                + ". "
-                + m_title
-                + "\n"
-                + maintenance_contents[maintenance_time:]
-                + "\n\n"
-                + FFXIV_JP_URL
-                + link
-                + "\n\n\n"
+            message = generate_carousel(
+                default_img,
+                m_title,
+                maintenance_contents[maintenance_time:],
+                FFXIV_JP_URL + link,
             )
-            message = message + list_message
 
     else:
         message = "글섭의 최신 점검관련 공지가 없습니다."

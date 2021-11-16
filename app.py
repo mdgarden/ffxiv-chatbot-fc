@@ -68,10 +68,17 @@ def handle_message(event):
 
     if user_message[0:1] == "@":
         response_content = find_command(user_message)
+        try:
+            line_bot_api.reply_message(event.reply_token, messages=response_content)
+        except Exception as ex:
+            print(ex)
+
     elif user_message[0:1] == "!":
         user_message = user_message[1:]
         response_content = search_db(user_message)
-        pass
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text=response_content)
+        )
     elif user_message == "bye":
         if isinstance(event.source, SourceGroup):
             line_bot_api.reply_message(
@@ -87,14 +94,6 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="Bot can't leave from 1:1 chat")
             )
-
-    if response_content != "":
-        if response_content is str:
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text=response_content)
-            )
-        else:
-            line_bot_api.reply_message(event.reply_token, messages=response_content)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-from src.scrape_homepage import extract_maintenance_post_jp, extract_character_profile
+from src import scrape_homepage
 
 command_list = {
     "@점검": {"category": "maintenance"},
@@ -11,17 +11,17 @@ command_list = {
 def find_command(command):
     try:
         first_command = command_list[command]
-    except:
-        pass
+    except Exception as ex:
+        print(ex)
 
     if first_command is not None:
         category = command_list[command]["category"]
         if category == "maintenance":
-            return extract_maintenance_post_jp()
+            return scrape_homepage.extract_maintenance_post_jp()
         elif category == "link":
             return send_link()
         elif category == "character":
-            return extract_character_profile(first_command)
+            return scrape_homepage.extract_character_profile(first_command)
         elif category == "manual":
             return send_manual()
         elif category == "topics":
@@ -31,7 +31,11 @@ def find_command(command):
 
 
 def send_topics():
-    pass
+    message = scrape_homepage.extract_topic_post()
+    return message
+
+
+send_topics()
 
 
 def send_manual():
