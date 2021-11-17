@@ -1,4 +1,4 @@
-from src import scrape_homepage
+from src import scrape_lodestone
 
 command_list = {
     "@점검": {"category": "maintenance"},
@@ -17,11 +17,29 @@ def find_command(command):
     if first_command is not None:
         category = command_list[command]["category"]
         if category == "maintenance":
-            return scrape_homepage.extract_maintenance_post_jp()
+            return scrape_lodestone.extract_maintenance_post_jp()
         elif category == "link":
             return send_link()
-        elif category == "character":
-            return scrape_homepage.extract_character_profile(first_command)
+        elif category == "manual":
+            return send_manual()
+        elif category == "topics":
+            return send_topics()
+        else:
+            pass
+
+
+def find_command_kr(command):
+    try:
+        first_command = command_list[command]
+    except Exception as ex:
+        print(ex)
+
+    if first_command is not None:
+        category = command_list[command]["category"]
+        if category == "maintenance":
+            return scrape_lodestone.extract_maintenance_post_jp()
+        elif category == "link":
+            return send_link()
         elif category == "manual":
             return send_manual()
         elif category == "topics":
@@ -31,15 +49,12 @@ def find_command(command):
 
 
 def send_topics():
-    message = scrape_homepage.extract_topic_post()
+    message = scrape_lodestone.extract_topic_post()
     return message
 
 
-send_topics()
-
-
 def send_manual():
-    message = "명령어 목록이에용!\n@+캐릭터 이름 : 로드스톤 링크\n@점검 : 최신 점검 관련 공지 목록(한섭 업뎃 예정)\n!+검색어 : 해당 아이템을 검색 후 언어별 이름 출력\n@링크 : 각종 링크를 불러옵니다"
+    message = "명령어 목록이에용!\n@공지 : 최신 토픽 목록\n@점검 : 최신 점검 관련 공지 목록(한섭 업뎃 예정)\n!+검색어 : 해당 아이템을 검색 후 언어별 이름 출력\n@링크 : 각종 링크를 불러옵니다"
     return message
 
 
