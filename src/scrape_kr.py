@@ -1,10 +1,10 @@
-import requests
-from bs4 import BeautifulSoup
-from linebot.models import (
-    CarouselColumn,
-    CarouselTemplate,
-    TemplateSendMessage,
-)
+# import requests
+# from bs4 import BeautifulSoup
+# from linebot.models import (
+#     CarouselColumn,
+#     CarouselTemplate,
+#     TemplateSendMessage,
+# )
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 headers = {
@@ -12,3 +12,8 @@ headers = {
 }
 
 FFXIV_KR_URL = "https://www.ff14.co.kr"
+
+
+def extract_maintenance_post_kr():
+    message = "준비중"
+    return message
