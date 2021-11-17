@@ -78,6 +78,8 @@ def handle_message(event):
                 response_content = find_command_kr(user_message)
             else:
                 response_content = find_command(user_message)
+        else:
+            response_content = find_command(user_message)
 
         try:
             line_bot_api.reply_message(event.reply_token, messages=response_content)

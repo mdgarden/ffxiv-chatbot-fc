@@ -1,5 +1,6 @@
-# import requests
-# from bs4 import BeautifulSoup
+import requests
+from bs4 import BeautifulSoup
+
 # from linebot.models import (
 #     CarouselColumn,
 #     CarouselTemplate,
@@ -12,8 +13,23 @@ headers = {
 }
 
 FFXIV_KR_URL = "https://www.ff14.co.kr"
+MAINTENANCE = "/news/notice?category=2"
+
+
+def get_soup(url):
+    request = requests.get(url, headers=headers)
+    soup = BeautifulSoup(request.text, "html.parser")
+    return soup
 
 
 def extract_maintenance_post_kr():
+    category_soup = get_soup(FFXIV_KR_URL + MAINTENANCE).find_all(
+        "a", {"class": "title"}
+    )
+    print(category_soup)
+
     message = "준비중"
     return message
+
+
+extract_maintenance_post_kr()
