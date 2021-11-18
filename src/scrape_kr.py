@@ -1,11 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
-
-# from linebot.models import (
-#     CarouselColumn,
-#     CarouselTemplate,
-#     TemplateSendMessage,
-# )
+from linebot.models import (
+    CarouselColumn,
+    CarouselTemplate,
+    TemplateSendMessage,
+)
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 headers = {
@@ -17,19 +16,30 @@ MAINTENANCE = "/news/notice?category=2"
 
 
 def get_soup(url):
-    request = requests.get(url, headers=headers)
+    request = requests.get(url, headers=headers, verify=False)
     soup = BeautifulSoup(request.text, "html.parser")
     return soup
 
 
 def extract_maintenance_post_kr():
     category_soup = get_soup(FFXIV_KR_URL + MAINTENANCE).find_all(
-        "a", {"class": "title"}
+        "span", {"class": "title"}
     )
-    print(category_soup)
+    for article in category_soup:
+        article_title = article.get_text(strip=True)
+        article_link = article.find("a")["href"]
+        print(article_link)
 
     message = "준비중"
     return message
+
+
+def extract_event_post_kr():
+    pass
+
+
+def generate_carousel(column, count, img):
+    pass
 
 
 extract_maintenance_post_kr()

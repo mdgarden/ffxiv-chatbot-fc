@@ -61,7 +61,7 @@ def callback():
     return "OK"
 
 
-isNoSpoilerRoom = [
+isKrRoom = [
     "Cda4a62dd237e6d8099314e83dc25afd9",
     "C4164d10181925811417349e3b563ea3f",
 ]
@@ -74,7 +74,7 @@ def handle_message(event):
 
     if user_message[0:1] == "@":
         if isinstance(event.source, SourceGroup):
-            if event.source.group_id in isNoSpoilerRoom:
+            if event.source.group_id in isKrRoom:
                 response_content = find_command_kr(user_message)
             else:
                 response_content = find_command(user_message)
@@ -117,23 +117,23 @@ def handle_message(event):
     elif user_message == "I close my eyes, tell us why must we suffer":
         # elif user_message == "한국 서버 전환":
         if isinstance(event.source, SourceGroup):
-            if event.source.group_id in isNoSpoilerRoom:
+            if event.source.group_id in isKrRoom:
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
                 )
-                print(isNoSpoilerRoom)
+                print(isKrRoom)
             else:
-                isNoSpoilerRoom.append(event.source.group_id)
+                isKrRoom.append(event.source.group_id)
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버 그룹으로 전환합니다.")
                 )
         if isinstance(event.source, SourceRoom):
-            if event.source.room_id in isNoSpoilerRoom:
+            if event.source.room_id in isKrRoom:
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
                 )
             else:
-                isNoSpoilerRoom.append(event.source.room_id)
+                isKrRoom.append(event.source.room_id)
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버 룸으로 전환합니다.")
                 )

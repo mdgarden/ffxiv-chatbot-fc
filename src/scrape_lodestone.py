@@ -17,7 +17,6 @@ FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
 FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
 LODESTONE = "/lodestone"
 CHARACTER = "/character"
-NOTICE = "/news/notice?category=2"
 FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
 default_img = (
     "https://pbs.twimg.com/card_img/1458489866896154624/jBwpzaqT?format=png&name=small"
@@ -53,17 +52,11 @@ def extract_topic_post():
             topics.append(topic)
         except Exception as ex:
             print(ex)
-    message = generate_carousel(topics, 3)
+    message = generate_image_carousel(topics, len(topics))
     return message
 
 
-# TODO: 영어 주소 왜 다른지 확인, 영어주소 넣을건지 뺄건지 정하기
-# TODO: 점검 공지 내용 generate_carousel에서 돌아가도록 내용 정리
-# TODO: 스포방지 모드일 때 한섭 공지 extract해서 답장하는 기능 넣기
-# TODO: 점검 공지가 3개 이하일 경우에는?
-
-
-def generate_carousel(column, count):
+def generate_image_carousel(column, count):
     """
     column = {"img_link": "", "title": "", "text": "", "url": ""}
     """
@@ -137,19 +130,11 @@ def extract_maintenance_post_jp():
                 "text": maintenance_contents[maintenance_time:],
             }
             lists.append(item)
-        message = generate_carousel(lists, len(lists))
+        message = generate_image_carousel(lists, len(lists))
     else:
         message = "글섭의 최신 점검관련 공지가 없습니다."
 
     return message
-
-
-def extract_maintenance_post_kr():
-    pass
-
-
-def scrape_maintenances():
-    pass
 
 
 def extract_character_profile(info):
