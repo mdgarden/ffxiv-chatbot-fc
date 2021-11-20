@@ -1,4 +1,4 @@
-from src import scrape_lodestone, scrape_kr
+from src import scrape
 
 command_list = {
     "@점검": {"category": "maintenance"},
@@ -17,7 +17,7 @@ def find_command(command):
     if first_command is not None:
         category = command_list[command]["category"]
         if category == "maintenance":
-            return scrape_lodestone.extract_maintenance_post_jp()
+            return scrape.extract_maintenance_post_jp()
         elif category == "link":
             return send_link()
         elif category == "manual":
@@ -37,19 +37,19 @@ def find_command_kr(command):
     if first_command is not None:
         category = command_list[command]["category"]
         if category == "maintenance":
-            return scrape_kr.extract_maintenance_post_kr()
+            return scrape.extract_maintenance_post_kr()
         elif category == "link":
             return send_link()
         elif category == "manual":
             return send_manual()
         elif category == "topics":
-            return scrape_kr.extract_maintenance_post_kr()
+            return scrape.extract_maintenance_post_kr()
         else:
             pass
 
 
 def send_topics():
-    message = scrape_lodestone.extract_topic_post()
+    message = scrape.extract_topic_post_jp()
     return message
 
 

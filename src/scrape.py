@@ -1,10 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from linebot.models import (
-    CarouselColumn,
-    CarouselTemplate,
-    TemplateSendMessage,
-)
+from src import template
 
 
 # ssl._create_default_https_context = ssl._create_unverified_context
@@ -15,6 +11,8 @@ headers = {
 # header = {'user-agent':ua.chrome}
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
 FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
+FFXIV_KR_URL = "https://www.ff14.co.kr"
+KR_MAINTENANCE = "/news/notice?category=2"
 LODESTONE = "/lodestone"
 CHARACTER = "/character"
 FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
@@ -29,7 +27,7 @@ def get_soup(url):
     return soup
 
 
-def extract_topic_post():
+def extract_topic_post_jp():
     topics = []
 
     topic_list = get_soup(FFXIV_JP_URL + LODESTONE).find_all(
@@ -45,47 +43,15 @@ def extract_topic_post():
             banner_url = li.find("img")["src"]
             topic = {
                 "title": topic_title,
-                "jp_url": topic_url_jp,
+                "url": topic_url_jp,
                 "img_url": banner_url,
                 "text": topic_text,
             }
             topics.append(topic)
         except Exception as ex:
             print(ex)
-    message = generate_image_carousel(topics, len(topics))
+    message = template.generate_carousels(topics, len(topics))
     return message
-
-
-def generate_image_carousel(column, count):
-    """
-    column = {"img_link": "", "title": "", "text": "", "url": ""}
-    """
-
-    columns = []
-    for i in range(count):
-        if i == 4:
-            break
-        title = column[i]["title"][:39]
-        text = column[i]["text"][:55]
-        columns.append(
-            CarouselColumn(
-                thumbnail_image_url=str(column[i]["img_url"]),
-                title=str(title),
-                text=str(text),
-                actions=[
-                    {
-                        "type": "uri",
-                        "label": "전체 읽기",
-                        "uri": column[i]["jp_url"],
-                    },
-                ],
-            )
-        )
-
-    return TemplateSendMessage(
-        alt_text="PC 미지원 양식입니다.",
-        template=CarouselTemplate(columns=columns, image_size="contain"),
-    )
 
 
 def extract_maintenance_post_jp():
@@ -130,39 +96,22 @@ def extract_maintenance_post_jp():
                 "text": maintenance_contents[maintenance_time:],
             }
             lists.append(item)
-        message = generate_image_carousel(lists, len(lists))
+        message = template.generate_carousels(lists, len(lists))
     else:
         message = "글섭의 최신 점검관련 공지가 없습니다."
 
     return message
 
 
-def extract_character_profile(info):
-
-    character_url = FFXIV_JP_URL + LODESTONE + CHARACTER + "/" + info["profile"]
-    contents = get_soup(character_url)
-
-    character_name = contents.find("p", {"class": "frame__chara__name"}).get_text()
-    try:
-        character_title = contents.find(
-            "p", {"class": "frame__chara__title"}
-        ).get_text()
-    except Exception as ex:
-        print(ex)
-        character_title = ""
-
-    character_job = contents.find("div", {"class": "character__class__data"}).get_text()
-    character_information = (
-        character_title
-        + "\n"
-        + character_name
-        + "\n"
-        + character_job
-        + "\n\n"
-        + character_url
+def extract_maintenance_post_kr():
+    category_soup = get_soup(FFXIV_KR_URL + KR_MAINTENANCE).find_all(
+        "span", {"class": "title"}
     )
-    return character_information
+    for article in category_soup:
+        article_title = article.get_text(strip=True)
+        article_link = article.find("a")["href"]
+        print(article_title)
+        print(article_link)
 
-
-def search_db(keyword):
-    get_soup(FFXIV_JP_DB_URL + keyword)
+    message = "준비중"
+    return message
