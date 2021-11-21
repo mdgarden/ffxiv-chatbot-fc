@@ -12,7 +12,7 @@ def generate_carousels(column):
 
     columns = []
     for i in range(len(column)):
-        if i > 5:
+        if i > 4:
             break
 
         # LINE 템플릿 상의 글자수 제한 :  제목 40자, 내용 60자
@@ -20,9 +20,7 @@ def generate_carousels(column):
         text = column[i]["text"][:59]
         columns.append(
             CarouselColumn(
-                thumbnail_image_url=str(column[i]["img_url"])
-                if column[i]["img_url"]
-                else None,
+                thumbnail_image_url=str(column[i]["img_url"]),
                 title=str(title),
                 text=str(text),
                 actions=[

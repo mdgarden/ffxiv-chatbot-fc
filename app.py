@@ -4,8 +4,7 @@ import sys
 from flask import Flask, request, abort
 
 from dotenv import load_dotenv
-from src.command import find_command, find_command_kr
-from src.search import search_db
+from src import command, search
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
@@ -61,7 +60,7 @@ def callback():
     return "OK"
 
 
-isKrRoom = [
+isNoSpoilerRoom = [
     "Cda4a62dd237e6d8099314e83dc25afd9",
     "C4164d10181925811417349e3b563ea3f",
 ]
@@ -74,24 +73,26 @@ def handle_message(event):
 
     if user_message[0:1] == "@":
         if isinstance(event.source, SourceGroup):
-            if event.source.group_id in isKrRoom:
-                response_content = find_command_kr(user_message)
+            if event.source.group_id in isNoSpoilerRoom:
+                response_content = command.find_command_kr(user_message)
             else:
-                response_content = find_command(user_message)
+                response_content = command.find_command(user_message)
         else:
-            response_content = find_command(user_message)
+            response_content = command.find_command(user_message)
 
+        # 텍스트 메세지면 except로 출력
         try:
             line_bot_api.reply_message(event.reply_token, messages=response_content)
         except Exception as ex:
             print(ex)
+            print(response_content)
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text=response_content)
             )
 
     elif user_message[0:1] == "!":
         user_message = user_message[1:]
-        response_content = search_db(user_message)
+        response_content = search.search_db(user_message)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=response_content)
         )
@@ -117,23 +118,23 @@ def handle_message(event):
     elif user_message == "I close my eyes, tell us why must we suffer":
         # elif user_message == "한국 서버 전환":
         if isinstance(event.source, SourceGroup):
-            if event.source.group_id in isKrRoom:
+            if event.source.group_id in isNoSpoilerRoom:
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
                 )
-                print(isKrRoom)
+                print(isNoSpoilerRoom)
             else:
-                isKrRoom.append(event.source.group_id)
+                isNoSpoilerRoom.append(event.source.group_id)
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버 그룹으로 전환합니다.")
                 )
         if isinstance(event.source, SourceRoom):
-            if event.source.room_id in isKrRoom:
+            if event.source.room_id in isNoSpoilerRoom:
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
                 )
             else:
-                isKrRoom.append(event.source.room_id)
+                isNoSpoilerRoom.append(event.source.room_id)
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버 룸으로 전환합니다.")
                 )

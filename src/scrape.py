@@ -11,18 +11,17 @@ headers = {
 # header = {'user-agent':ua.chrome}
 FFXIV_JP_URL = "https://jp.finalfantasyxiv.com"
 FFXIV_NA_URL = "https://na.finalfantasyxiv.com"
+LODESTONE = "/lodestone"
+
 FFXIV_KR_URL = "https://www.ff14.co.kr"
 KR_MAINTENANCE = "/news/notice?category=2"
-LODESTONE = "/lodestone"
-CHARACTER = "/character"
-FFXIV_JP_DB_URL = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/search/?q="
-default_img = (
-    "https://pbs.twimg.com/card_img/1458489866896154624/jBwpzaqT?format=png&name=small"
-)
+
+jp_default_img = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbr4C0P%2FbtrlFLbcpd0%2FWji1bxqhhWiP0H1Hfgkya1%2Fimg.png"
+kr_default_img = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbjWmcb%2FbtrlFKch2Cz%2FoTZx8aGZPI57Pe7FKf1iUk%2Fimg.jpg"
 
 
 def get_soup(url):
-    request = requests.get(url, headers=headers)
+    request = requests.get(url, headers=headers, verify=False)
     soup = BeautifulSoup(request.text, "html.parser")
     return soup
 
@@ -50,7 +49,7 @@ def extract_topic_post_jp():
             topics.append(topic)
         except Exception as ex:
             print(ex)
-    message = template.generate_carousels(topics, len(topics))
+    message = template.generate_carousels(topics)
     return message
 
 
@@ -91,12 +90,12 @@ def extract_maintenance_post_jp():
 
             item = {
                 "title": m_title,
-                "jp_url": FFXIV_JP_URL + link,
-                "img_url": default_img,
+                "url": FFXIV_JP_URL + link,
+                "img_url": jp_default_img,
                 "text": maintenance_contents[maintenance_time:],
             }
             lists.append(item)
-        message = template.generate_carousels(lists, len(lists))
+        message = template.generate_carousels(lists)
     else:
         message = "글섭의 최신 점검관련 공지가 없습니다."
 
@@ -109,9 +108,16 @@ def extract_maintenance_post_kr():
     )
     for article in category_soup:
         article_title = article.get_text(strip=True)
-        article_link = article.find("a")["href"]
+        article_link = FFXIV_KR_URL + article.find("a")["href"]
         print(article_title)
         print(article_link)
 
     message = "준비중"
     return message
+
+
+def extract_topic_kr():
+    pass
+
+
+extract_maintenance_post_kr()
