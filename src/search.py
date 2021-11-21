@@ -49,7 +49,7 @@ def search_db(keyword):
         if keyword == DB[item_num][locale]:
             result.append(item_result)
             message = (
-                +'"'
+                '"'
                 + keyword
                 + '"의 검색결과입니다.'
                 + "\n\n"
@@ -62,6 +62,7 @@ def search_db(keyword):
                 + "En : "
                 + result[0]["words"]["en"]
             )
+            print(message)
             return message
 
         elif keyword in DB[item_num][locale]:

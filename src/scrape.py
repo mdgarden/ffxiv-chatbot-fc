@@ -129,9 +129,6 @@ def extract_maintenance_post_kr():
     return message
 
 
-extract_maintenance_post_kr()
-
-
 def extract_topic_kr():
     lists = []
     soup = get_soup(FFXIV_KR_URL).find_all("div", {"class": "mbanner_box"})

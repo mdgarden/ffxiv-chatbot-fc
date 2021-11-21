@@ -93,6 +93,7 @@ def handle_message(event):
     elif user_message[0:1] == "!":
         user_message = user_message[1:]
         response_content = search.search_db(user_message)
+        print(user_message)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=response_content)
         )
