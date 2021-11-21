@@ -1,7 +1,7 @@
 import json
 
-KR_DB_PATH = "src/assets/data/ko-items.json"
-GB_DB_PATH = "src/assets/data/items.json"
+KR_DB_PATH = "src/assets/data/items/ko-items.json"
+GB_DB_PATH = "src/assets/data/items/items.json"
 
 # 팀크래프트 DB업데이트 후 한번씩 실행시킬 것
 
@@ -30,7 +30,7 @@ def write_json(obj):
     json_object = json.dumps(obj, indent=4, ensure_ascii=False)
 
     # Writing to sample.json
-    with open("merged_db.json", "w") as outfile:
+    with open("item_db.json", "w") as outfile:
         outfile.write(json_object)
 
 
