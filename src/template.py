@@ -12,6 +12,7 @@ def generate_carousels(column):
 
     columns = []
     for i in range(len(column)):
+        # 최대 생성 갯수 설정(현재 5개)
         if i > 4:
             break
 

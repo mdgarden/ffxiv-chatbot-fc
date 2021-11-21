@@ -3,6 +3,7 @@ from src import scrape
 command_list = {
     "@점검": {"category": "maintenance"},
     "@공지": {"category": "topics"},
+    "@토픽": {"category": "topics"},
     "@링크": {"category": "link"},
     "@타타루": {"category": "manual"},
 }
@@ -23,7 +24,7 @@ def find_command(command):
         elif category == "manual":
             return send_manual()
         elif category == "topics":
-            return send_topics()
+            return scrape.extract_topic_post_jp()
         else:
             pass
 
@@ -43,14 +44,10 @@ def find_command_kr(command):
         elif category == "manual":
             return send_manual()
         elif category == "topics":
-            return scrape.extract_maintenance_post_kr()
+            print("test")
+            return scrape.extract_topic_kr()
         else:
             pass
-
-
-def send_topics():
-    message = scrape.extract_topic_post_jp()
-    return message
 
 
 def send_manual():
