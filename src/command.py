@@ -8,6 +8,8 @@ command_list = {
     "@타타루": {"category": "manual"},
 }
 
+# TODO:링크 버튼 형식으로 만들기
+
 
 def find_command(command):
     try:
