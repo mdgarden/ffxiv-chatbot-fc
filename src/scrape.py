@@ -19,6 +19,8 @@ KR_MAINTENANCE = "/news/notice?category=2"
 jp_default_img = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbr4C0P%2FbtrlFLbcpd0%2FWji1bxqhhWiP0H1Hfgkya1%2Fimg.png"
 kr_default_img = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbjWmcb%2FbtrlFKch2Cz%2FoTZx8aGZPI57Pe7FKf1iUk%2Fimg.jpg"
 
+# TODO: Add Elipsis
+
 
 def get_soup(url):
     request = requests.get(url, headers=headers, verify=False)
