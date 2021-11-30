@@ -10,9 +10,13 @@ def get_eorzea_time():
     currentTime = int(time.time())
     eHour = math.floor((currentTime * 12 / 35 / 60) % 24)
     eMinute = math.floor((currentTime * 12 / 35) % 60)
-    print(eHour)
-    print(eMinute)
-    pass
+    if eMinute < 10:
+        eMinute = "0" + str(eMinute)
+    if eHour < 10:
+        eHour = "0" + str(eHour)
+    eTime = str(eHour) + " : " + str(eMinute)
+    print(eTime)
+    return eTime
 
 
 def get_weather_forecast():

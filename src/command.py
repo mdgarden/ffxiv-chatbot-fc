@@ -6,6 +6,7 @@ command_list = {
     "@토픽": {"category": "topics"},
     "@링크": {"category": "link"},
     "@타타루": {"category": "manual"},
+    "@시간": {"category": "time"},
 }
 
 # TODO:링크 버튼 형식으로 만들기
