@@ -142,6 +142,8 @@ def handle_message(event):
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버 룸으로 전환합니다.")
                 )
+    elif user_message == "오메가 오메가":
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="오메가 오메가"))
 
 
 if __name__ == "__main__":
