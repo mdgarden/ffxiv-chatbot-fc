@@ -34,6 +34,7 @@ def search_db(keyword):
 
     # 특수기호 검출시 작동안함
     if re.findall("[=#/?$!}]+", keyword) or len(keyword) == 0:
+        print(len(keyword))
         return
 
     for item_num in DB:

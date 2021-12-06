@@ -95,7 +95,7 @@ def handle_message(event):
         user_message = user_message[1:]
         response_content = search.search_db(user_message)
 
-        if response_content is not str:
+        if response_content is None:
             return
 
         line_bot_api.reply_message(
