@@ -30,8 +30,11 @@ def search_db(keyword):
     DB = open_db_json()
     locale = classify_lang(keyword)
 
-    if locale != "kr" or locale != "ja" or locale != "en":
-        locale = "en"
+    if locale != "en":
+        if locale == "ko" or locale == "ja":
+            pass
+        else:
+            locale = "en"
 
     result = []
     message = ""
