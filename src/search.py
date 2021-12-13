@@ -29,12 +29,15 @@ def open_db_json():
 def search_db(keyword):
     DB = open_db_json()
     locale = classify_lang(keyword)
+
+    if locale != "kr" or locale != "jp" or locale != "en":
+        locale = "en"
+
     result = []
     message = ""
 
     # 특수기호 검출시 작동안함
     if re.findall("[=#/?$!}]+", keyword) or len(keyword) == 0:
-        print(len(keyword))
         return
 
     for item_num in DB:
@@ -63,7 +66,6 @@ def search_db(keyword):
                 + "En : "
                 + result[0]["words"]["en"]
             )
-            print(message)
             return message
 
         elif keyword in DB[item_num][locale]:
@@ -73,7 +75,24 @@ def search_db(keyword):
         message = keyword + "의 검색결과가 없습니다. 검색어를 확인해주세요."
         return message
 
-    elif len(result) < 3:
+    elif len(result) == 1:
+        message = (
+            '"'
+            + keyword
+            + '"의 검색결과입니다.'
+            + "\n\n"
+            + "Ko : "
+            + result[0]["words"]["ko"]
+            + "\n"
+            + "Ja : "
+            + result[0]["words"]["ja"]
+            + "\n"
+            + "En : "
+            + result[0]["words"]["en"]
+        )
+        return message
+
+    elif len(result) < 3 and len(result) > 1:
         message = (
             keyword
             + "의 검색결과입니다. \n총"
