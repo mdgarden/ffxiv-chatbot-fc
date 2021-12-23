@@ -19,7 +19,7 @@ def merge_json(target, source):
             merged_json[key] = target[key] | source[key]
         except Exception as ex:
             print(ex)
-            source[key] = {"ko": "Not Updated"}
+            source[key] = {"ko": "미구현 데이터"}
             merged_json[key] = target[key] | source[key]
 
     return merged_json
