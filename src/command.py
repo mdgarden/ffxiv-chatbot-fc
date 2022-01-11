@@ -14,11 +14,11 @@ command_list = {
 
 def find_command(command):
     try:
-        first_command = command_list[command]
+        jp_command = command_list[command]
     except Exception as ex:
         print(ex)
 
-    if first_command is not None:
+    if jp_command is not None:
         category = command_list[command]["category"]
         if category == "maintenance":
             return scrape.extract_maintenance_post_jp()
@@ -34,11 +34,11 @@ def find_command(command):
 
 def find_command_kr(command):
     try:
-        first_command = command_list[command]
+        kr_command = command_list[command]
     except Exception as ex:
         print(ex)
 
-    if first_command is not None:
+    if kr_command is not None:
         category = command_list[command]["category"]
         if category == "maintenance":
             return scrape.extract_maintenance_post_kr()

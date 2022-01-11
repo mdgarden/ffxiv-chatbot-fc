@@ -24,7 +24,7 @@ kr_default_img = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=
 
 def get_soup(url):
     request = requests.get(url, headers=headers, verify=False)
-    soup = BeautifulSoup(request.text, "html.parser")
+    soup = BeautifulSoup(request.text, "html.parser", from_encoding="utf-8")
     return soup
 
 
@@ -106,9 +106,18 @@ def extract_maintenance_post_jp():
 
 def extract_maintenance_post_kr():
     lists = []
-    category_soup = get_soup(FFXIV_KR_URL + KR_MAINTENANCE).find_all(
-        "span", {"class": "title"}
-    )
+    # message = ""
+    # maintenance = (
+    #     get_soup(FFXIV_KR_URL)
+    #     .find("div", {"class": "info"})
+    #     .find("h1")
+    #     .get_text(strip=True)
+    # )
+    # print(maintenance)
+    # if maintenance:
+    #     message == maintenance
+    #     return message
+    category_soup = get_soup(FFXIV_KR_URL).find_all("span", {"class": "title"})
 
     for post in category_soup:
         post_title = post.get_text(strip=True)
@@ -128,6 +137,11 @@ def extract_maintenance_post_kr():
         lists.append(post)
 
     message = template.generate_carousels(lists)
+    if len(lists) == 0:
+        print("message")
+        print(message)
+        message = "현재 점검 관련 게시글을 불러올 수 없거나, 해당 내용이 없습니다."
+        return message
     return message
 
 

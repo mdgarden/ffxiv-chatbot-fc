@@ -124,8 +124,8 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="Bot can't leave from 1:1 chat")
             )
 
-    elif user_message == "I close my eyes, tell us why must we suffer":
-        # elif user_message == "한국 서버 전환":
+    elif user_message == "선대 아젬 베네스":
+        print("venat")
         if isinstance(event.source, SourceGroup):
             if event.source.group_id in isNoSpoilerRoom:
                 line_bot_api.reply_message(
@@ -137,16 +137,20 @@ def handle_message(event):
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버 그룹으로 전환합니다.")
                 )
+                print(isNoSpoilerRoom)
         if isinstance(event.source, SourceRoom):
             if event.source.room_id in isNoSpoilerRoom:
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
                 )
+                print(isNoSpoilerRoom)
             else:
                 isNoSpoilerRoom.append(event.source.room_id)
                 line_bot_api.reply_message(
                     event.reply_token, TextSendMessage(text="한국 서버 룸으로 전환합니다.")
                 )
+                print(isNoSpoilerRoom)
+
     elif user_message == "오메가 오메가":
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="오메가 오메가"))
 
