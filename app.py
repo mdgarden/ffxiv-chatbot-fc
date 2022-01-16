@@ -17,6 +17,13 @@ from linebot.models import (
 
 from src.ingame import get_eorzea_time
 
+isNoSpoilerRoom = [
+    "Cda4a62dd237e6d8099314e83dc25afd9",
+    "C4164d10181925811417349e3b563ea3f",
+]
+
+isSpoilerRoom = []
+
 # take environment variables from .env
 load_dotenv()
 
@@ -61,12 +68,6 @@ def callback():
         abort(400)
 
     return "OK"
-
-
-isNoSpoilerRoom = [
-    "Cda4a62dd237e6d8099314e83dc25afd9",
-    "C4164d10181925811417349e3b563ea3f",
-]
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -124,32 +125,32 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="Bot can't leave from 1:1 chat")
             )
 
-    elif user_message == "선대 아젬 베네스":
-        print("venat")
-        if isinstance(event.source, SourceGroup):
-            if event.source.group_id in isNoSpoilerRoom:
-                line_bot_api.reply_message(
-                    event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
-                )
-                print(isNoSpoilerRoom)
-            else:
-                isNoSpoilerRoom.append(event.source.group_id)
-                line_bot_api.reply_message(
-                    event.reply_token, TextSendMessage(text="한국 서버 그룹으로 전환합니다.")
-                )
-                print(isNoSpoilerRoom)
-        if isinstance(event.source, SourceRoom):
-            if event.source.room_id in isNoSpoilerRoom:
-                line_bot_api.reply_message(
-                    event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
-                )
-                print(isNoSpoilerRoom)
-            else:
-                isNoSpoilerRoom.append(event.source.room_id)
-                line_bot_api.reply_message(
-                    event.reply_token, TextSendMessage(text="한국 서버 룸으로 전환합니다.")
-                )
-                print(isNoSpoilerRoom)
+    # elif user_message == "선대 아젬 베네스":
+    #     print("venat")
+    #     if isinstance(event.source, SourceGroup):
+    #         if event.source.group_id not in isNoSpoilerRoom:
+    #             line_bot_api.reply_message(
+    #                 event.reply_token, TextSendMessage(text="글로벌 서버로 설정되어있습니다.")
+    #             )
+    #             print(isNoSpoilerRoom)
+    #         else:
+    #             isNoSpoilerRoom.append(event.source.group_id)
+    #             line_bot_api.reply_message(
+    #                 event.reply_token, TextSendMessage(text="한국 서버 그룹으로 전환합니다.")
+    #             )
+    #             print(isNoSpoilerRoom)
+    #     if isinstance(event.source, SourceRoom):
+    #         if event.source.room_id in isNoSpoilerRoom:
+    #             line_bot_api.reply_message(
+    #                 event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
+    #             )
+    #             print(isNoSpoilerRoom)
+    #         else:
+    #             isNoSpoilerRoom.append(event.source.room_id)
+    #             line_bot_api.reply_message(
+    #                 event.reply_token, TextSendMessage(text="한국 서버 룸으로 전환합니다.")
+    #             )
+    #             print(isNoSpoilerRoom)
 
     elif user_message == "오메가 오메가":
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="오메가 오메가"))
