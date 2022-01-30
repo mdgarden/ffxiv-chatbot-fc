@@ -1,4 +1,5 @@
 import os
+from random import randint
 import sys
 
 from flask import Flask, request, abort
@@ -23,6 +24,9 @@ isNoSpoilerRoom = [
 ]
 
 isSpoilerRoom = []
+
+YOSHIDA = ["요시다아아아아", "요시다!!!!!", "요시다?", "요시다...."]
+
 
 # take environment variables from .env
 load_dotenv()
@@ -125,6 +129,14 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="Bot can't leave from 1:1 chat")
             )
 
+    elif "요시다" in user_message:
+        pick_yoshida = YOSHIDA[randint(0, 3)]
+        print(pick_yoshida)
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text=pick_yoshida)
+        )
+
+    # 한국 서버 전환
     # elif user_message == "선대 아젬 베네스":
     #     print("venat")
     #     if isinstance(event.source, SourceGroup):
