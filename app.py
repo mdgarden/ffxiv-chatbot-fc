@@ -27,6 +27,7 @@ isSpoilerRoom = []
 
 YOSHIDA = ["요시다아아아아", "요시다!!!!!", "요시다?", "요시다...."]
 
+# Run get_new_tweet()
 
 # take environment variables from .env
 load_dotenv()
