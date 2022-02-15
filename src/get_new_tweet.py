@@ -23,6 +23,7 @@ load_dotenv()
 # Send broadcast message
 
 bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
+newest_tweet_id = []
 
 
 def get_single_tweet_url(user_id, tweet_id):
@@ -40,9 +41,6 @@ def bearer_oauth(r):
     """
     Method required by bearer token authentication.
     """
-    print("bearer_token")
-    print(bearer_token)
-
     r.headers["Authorization"] = f"Bearer {bearer_token}"
     r.headers["User-Agent"] = "v2TweetLookupPython"
     print("r")
@@ -66,8 +64,12 @@ def get_recent_tweet(user_id):
     url = create_url(user_id)
     json_response = connect_to_endpoint(url)
     newest_id = json_response["meta"]["newest_id"]
-    # filter new tweet
-    return get_single_tweet_url(user_id, newest_id)
+    # Filter new tweet
+    if newest_id != newest_tweet_id[0]:
+        newest_tweet_id[0] = newest_id
+        return get_single_tweet_url(user_id, newest_id)
+    else:
+        pass
 
 
 get_recent_tweet("FF_XIV_JP")
