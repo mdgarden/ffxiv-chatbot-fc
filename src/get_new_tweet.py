@@ -24,6 +24,7 @@ load_dotenv()
 
 bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
 newest_tweet_id = []
+user_id_list = ["FFXIV_KOREA", "FF_XIV_JP", "FFXIV_NEWS_JP"]
 
 
 def get_single_tweet_url(user_id, tweet_id):
