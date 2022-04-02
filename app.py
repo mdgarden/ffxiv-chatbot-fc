@@ -2,7 +2,8 @@ import os
 from random import randint
 import sys
 
-from flask import Flask, request, abort
+from flask import Flask, request, abort, json
+from pymongo import MongoClient
 
 from dotenv import load_dotenv
 from src import command, search
@@ -18,21 +19,21 @@ from linebot.models import (
 
 from src.ingame import get_eorzea_time
 
-isNoSpoilerRoom = [
-    "Cda4a62dd237e6d8099314e83dc25afd9",
-    "C4164d10181925811417349e3b563ea3f",
-]
-
-isSpoilerRoom = []
-
-YOSHIDA = ["요시다아아아아", "요시다!!!!!", "요시다?", "요시다...."]
-
-# Run get_new_tweet()
-
 # take environment variables from .env
 load_dotenv()
-
 app = Flask(__name__)
+
+
+def get_group_list():
+    with MongoClient(os.getenv("MONGO_URL")):
+        db = MongoClient(os.getenv("MONGO_URL")).tweetify
+        group_list = list(db.users.find())
+    return group_list
+
+
+group_list = get_group_list()
+YOSHIDA = ["요시다아아아아", "요시다!!!!!", "요시다?", "요시다...."]
+
 
 # get channel_secret and channel_access_token from your environment variable
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
@@ -52,6 +53,43 @@ handler = WebhookHandler(channel_secret)
 @app.route("/")
 def hello_world():
     return "Application is Running!"
+
+
+@app.route("/tweet", methods=["POST"])
+def new_tweet():
+    # get request body as text
+    body = request.get_data(as_text=True)
+
+    response = app.response_class(
+        response=json.dumps(body), status=200, mimetype="application/json"
+    )
+    data = json.loads(body)
+
+    # format message
+    text = data["text"]
+    link = data["link"]
+    message = text + "\n\n\n" + link
+    print(message)
+    group_list = get_group_list()
+    try:
+        for group in group_list:
+            print("group")
+            print(group)
+            if (
+                group["status"] == os.getenv("STATUS")
+                and group["region"] == data["region"]
+            ):
+                line_bot_api.push_message(
+                    group["room_id"], [TextSendMessage(text=message)]
+                )
+                print("send!")
+
+    except Exception as e:
+        print(e)
+        response = app.response_class(
+            response=e, status=400, mimetype="application/json"
+        )
+    return response
 
 
 @app.route("/callback", methods=["POST"])
@@ -82,12 +120,10 @@ def handle_message(event):
 
     if user_message[0:1] == "@":
         if isinstance(event.source, SourceGroup):
-            if event.source.group_id in isNoSpoilerRoom:
-                response_content = command.find_command_kr(user_message)
-            else:
+            if event.source.group_id in group_list["room_id"]:
                 response_content = command.find_command(user_message)
         else:
-            response_content = command.find_command(user_message)
+            response_content = command.find_command_kr(user_message)
 
         # 텍스트 메세지면 except로 출력
         try:
@@ -130,43 +166,47 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="Bot can't leave from 1:1 chat")
             )
 
+    # 글로벌 서버 전환
+    elif user_message == "For this journey's end is but one step forward to tomorrow":
+        if isinstance(event.source, SourceGroup):
+            switch_server("group", event.source.group_id, "jp")
+        if isinstance(event.source, SourceRoom):
+            switch_server("room", event.source.room_id, "jp")
+
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text="글로벌 서버 채팅방으로 전환합니다.")
+        )
+
+    # 한국 서버 전환
+    elif user_message == "최팀장 꽃미남":
+        if isinstance(event.source, SourceGroup):
+            switch_server("group", event.source.group_id, "kr")
+        if isinstance(event.source, SourceRoom):
+            switch_server("room", event.source.room_id, "kr")
+
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text="한국 서버 채팅방으로 전환합니다.")
+        )
+
+    # toy
+    elif user_message == "오메가 오메가":
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="오메가 오메가"))
+
     elif "요시다" in user_message:
         pick_yoshida = YOSHIDA[randint(0, 3)]
-        print(pick_yoshida)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=pick_yoshida)
         )
 
-    # 한국 서버 전환
-    # elif user_message == "선대 아젬 베네스":
-    #     print("venat")
-    #     if isinstance(event.source, SourceGroup):
-    #         if event.source.group_id not in isNoSpoilerRoom:
-    #             line_bot_api.reply_message(
-    #                 event.reply_token, TextSendMessage(text="글로벌 서버로 설정되어있습니다.")
-    #             )
-    #             print(isNoSpoilerRoom)
-    #         else:
-    #             isNoSpoilerRoom.append(event.source.group_id)
-    #             line_bot_api.reply_message(
-    #                 event.reply_token, TextSendMessage(text="한국 서버 그룹으로 전환합니다.")
-    #             )
-    #             print(isNoSpoilerRoom)
-    #     if isinstance(event.source, SourceRoom):
-    #         if event.source.room_id in isNoSpoilerRoom:
-    #             line_bot_api.reply_message(
-    #                 event.reply_token, TextSendMessage(text="한국 서버로 설정되어있습니다.")
-    #             )
-    #             print(isNoSpoilerRoom)
-    #         else:
-    #             isNoSpoilerRoom.append(event.source.room_id)
-    #             line_bot_api.reply_message(
-    #                 event.reply_token, TextSendMessage(text="한국 서버 룸으로 전환합니다.")
-    #             )
-    #             print(isNoSpoilerRoom)
 
-    elif user_message == "오메가 오메가":
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="오메가 오메가"))
+def switch_server(source, id, region):
+    with MongoClient(os.getenv("MONGO_URL")):
+        db = MongoClient(os.getenv("MONGO_URL")).tweetify
+        db.users.update_one(
+            {"room_id": id},
+            {"$set": {"region": region, "source": source}},
+            upsert=True,
+        )
 
 
 if __name__ == "__main__":
