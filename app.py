@@ -120,8 +120,11 @@ def handle_message(event):
 
     if user_message[0:1] == "@":
         if isinstance(event.source, SourceGroup):
-            if event.source.group_id in group_list["room_id"]:
-                response_content = command.find_command(user_message)
+            for room in group_list:
+                if event.source.group_id in room["room_id"] and room["region"] == "jp":
+                    response_content = command.find_command(user_message)
+                else:
+                    response_content = command.find_command_kr(user_message)
         else:
             response_content = command.find_command_kr(user_message)
 
