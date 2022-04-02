@@ -30,8 +30,7 @@ platformdirs==2.5.1
 pybind11==2.9.1
 pycodestyle==2.8.0
 pyflakes==2.4.0
-pymongo==4.0.2
-'pymongo[srv]'==*
+pymongo[tls,srv]==*
 python-dotenv==0.19.2
 pytz==2021.3
 pytz-deprecation-shim==0.1.0.post0
