@@ -47,7 +47,6 @@ def find_command_kr(command):
         elif category == "manual":
             return send_manual()
         elif category == "topics":
-            print("test")
             return scrape.extract_topic_kr()
         else:
             pass
