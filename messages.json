@@ -1,0 +1,759 @@
+{
+  "type": "flex",
+  "altText": "test",
+  "contents": {
+    "type": "carousel",
+    "contents": [
+      {
+        "type": "bubble",
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "미지의 골렘 본격 조사!",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "드래곤 퀘스트X 콜라보레이션 이벤트가 돌아왔습니다!돌발 임무를 완료하고 '골렘 파편'을 입수해 '무척 좋은 보상'을 획득해 보세요!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.kr/events/fun/2022/theres_golems_in_those_hills"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.kr/events/fun/2022/theres_golems_in_those_hills"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbjWmcb%2FbtrlFKch2Cz%2FoTZx8aGZPI57Pe7FKf1iUk%2Fimg.jpg"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "2022 팬페스티벌 서울 메모리얼영상 공개!",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "거리는 멀지만 마음만은 가까웠던팬페스티벌의 열기를 영상으로 다시 느껴보세요!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.krhttps://youtu.be/F6tPfLfAl4o "
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.krhttps://youtu.be/F6tPfLfAl4o "
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://static.ff14.co.kr/Contents/2022/03/81EAD9337169790651D44A9F5C884DC5E7BF983D7174A82F27F4178A5B8A3F8E.png"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "초코잎 요정 증정 이벤트",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "정액제를 누적 90일 사용한 모든 모험가님께 한정판 탈것 초코잎 요정을 드립니다!기간 한정 판매되는 특별한 이용권 패키지와 함께효월의 종언 확장팩도 준비해 보세요!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.kr/events/2022/Marshop"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.kr/events/2022/Marshop"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://static.ff14.co.kr/Contents/2022/03/F4BF396864EFF6681354E6FDEFF8AF7C890C1F00CD08E50F25960811096E3CC8.png"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "효월의 종언 사전예약 이벤트",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "효월의 종언 사전예약 하면 특별 보상 100% 지급!한정판 꼬마친구와 의상으로 효월의 종언을 준비하세요!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.kr/events/2022/v6_0_Reservations#"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.kr/events/2022/v6_0_Reservations#"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://static.ff14.co.kr/Contents/2022/02/591B8BD37B5A73AC598DCFC8BBF39EB773E6120AB3432BFD3D40F5B1103B054B.png"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "우대 서버만의 특별한 혜택!",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "빠른 성장과 기초 아이템 지원 혜택까지!우대 서버에서만 누릴 수 있는 혜택을 확인해보세요!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.kr/news/event/view/394"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.kr/news/event/view/394"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbjWmcb%2FbtrlFKch2Cz%2FoTZx8aGZPI57Pe7FKf1iUk%2Fimg.jpg"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "효월의 종언 런칭 트레일러",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "빛과 어둠의 싸움은 지금 마지막 순간을 맞이한다!지금 파이널판타지14 한국 공식 유튜브 채널에서 확인하세요!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.krhttps://youtu.be/88dk9Dswg-0"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.krhttps://youtu.be/88dk9Dswg-0"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbjWmcb%2FbtrlFKch2Cz%2FoTZx8aGZPI57Pe7FKf1iUk%2Fimg.jpg"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "효월의 종언 콜렉터즈 에디션사전예약",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "효월의 종언 콜렉터즈 에디션 사전예약 구매하고다양한 특전을 받아보세요.",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.kr/events/fun/2022/febshop3"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.kr/events/fun/2022/febshop3"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://static.ff14.co.kr/Contents/2022/02/ADA07D69413F24AA424E30FDA57EBD5EBBCDD045A9DD039586A4140B1C7718BD.png"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "GM노트 161화",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "GM고셀마르가 알려주는 드래곤 퀘스트X 콜라보 이벤트!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.kr/eorzea/gmnote/view/169?page=1"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.kr/eorzea/gmnote/view/169?page=1"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://static.ff14.co.kr/Contents/2022/03/177B2B7C6311CBA9228E1AB991F01DDDCD36094E1A40D5F1D871EC2D963F9BAB.png"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "파이널판타지14 굿즈스토어",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "각양각색 다양한 굿즈들이 한가득!지금 파이널판타지14 굿즈스토어를 방문하세요!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.krhttps://smartstore.naver.com/aricoms"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.krhttps://smartstore.naver.com/aricoms"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://static.ff14.co.kr/Contents/2022/03/D83E9562A6345670D0F65A7F4CC0ACC997DD46FFF65C611D5C75CDC30C30974D.png"
+        },
+        "type": "bubble"
+      },
+      {
+        "body": {
+          "contents": [
+            {
+              "size": "lg",
+              "text": "2022 팬페스티벌 서울 다시보기",
+              "type": "text",
+              "weight": "bold",
+              "wrap": true
+            },
+            {
+              "contents": [
+                {
+                  "text": "2월 12일(토) 진행된 2022 디지털 팬페스티벌 서울 온라인 방송이 종료되었습니다.그 뜨거운 현장을 다시 한번 영상으로 만나보세요!",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "lg",
+              "spacing": "sm",
+              "type": "box"
+            },
+            {
+              "contents": [
+                {
+                  "color": "#9a9a9a",
+                  "flex": 5,
+                  "size": "xs",
+                  "text": "date here",
+                  "type": "text",
+                  "wrap": true
+                }
+              ],
+              "layout": "baseline",
+              "margin": "md",
+              "type": "box"
+            }
+          ],
+          "layout": "vertical",
+          "type": "box"
+        },
+        "footer": {
+          "backgroundColor": "#42659a",
+          "contents": [
+            {
+              "action": {
+                "label": "본문 읽기",
+                "type": "uri",
+                "uri": "https://www.ff14.co.kr/eorzea/tv/view/133"
+              },
+              "height": "sm",
+              "style": "link",
+              "type": "button"
+            }
+          ],
+          "flex": "0",
+          "layout": "vertical",
+          "spacing": "sm",
+          "type": "box"
+        },
+        "hero": {
+          "action": {
+            "label": "label",
+            "type": "uri",
+            "uri": "https://www.ff14.co.kr/eorzea/tv/view/133"
+          },
+          "aspectMode": "cover",
+          "aspectRatio": "16:9",
+          "size": "full",
+          "type": "image",
+          "url": "https://static.ff14.co.kr/Contents/2022/02/7A24C5DED236200A20ECDB2102B2C171D560941C54D3675078ACDA79095DA4F6.png"
+        }
+      }
+    ]
+  }
+}

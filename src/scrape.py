@@ -2,8 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import urllib3
 
-# from src import template
-import template
+from src import template
+
+# import template
 from urllib3.exceptions import InsecureRequestWarning
 
 urllib3.disable_warnings(InsecureRequestWarning)
@@ -115,7 +116,9 @@ def extract_maintenance_post_jp():
 
 def extract_maintenance_post_kr():
     lists = []
-    category_soup = get_soup(FFXIV_KR_URL).find_all("span", {"class": "title"})
+    category_soup = get_soup(FFXIV_KR_URL + KR_MAINTENANCE).find_all(
+        "span", {"class": "title"}
+    )
 
     for post in category_soup:
         post_title = post.get_text(strip=True)
@@ -137,8 +140,6 @@ def extract_maintenance_post_kr():
 
     message = template.generate_carousels(lists)
     if len(lists) == 0:
-        print("message")
-        print(message)
         message = "현재 점검 관련 게시글을 불러올 수 없거나, 해당 내용이 없습니다."
         return message
     return message
@@ -170,9 +171,24 @@ def extract_topic_kr():
             print(ex)
             post_img = kr_default_img
 
+        # TODO : 아이콘이 없는 경우 배너 이미지 추출, 배너 이미지도 없는 경우 기본 사진으로 대체
+        # try:
+        #     post_banner = (
+        #         "https:"
+        #         + post.select_one("div.mbanner_box")["style"]
+        #         .split("url(")[1]
+        #         .split(")")[0]
+        #     )
+        # except Exception as ex:
+        #     print(ex)
+        #     post_img = kr_default_img
+
         post = {
             "title": post_title,
-            "url": FFXIV_KR_URL + post_link[0][20:-1],
+            # "url": FFXIV_KR_URL + post_link[0][20:-1],
+            "url": FFXIV_KR_URL + post_link[0][20:-1]
+            if "https://" not in str(post_link)
+            else post_link[0][20:-1],
             "img_url": post_img,
             "text": post_text,
             "date": post_date,
@@ -183,5 +199,5 @@ def extract_topic_kr():
     return message
 
 
-message = extract_topic_kr()
-print(message)
+# message = extract_topic_kr()
+# print(message)

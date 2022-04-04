@@ -8,6 +8,7 @@ from linebot.models import (
     ButtonComponent,
     URIAction,
 )
+import urllib
 
 
 def generate_carousels(column):
@@ -18,31 +19,37 @@ def generate_carousels(column):
     columns = []
     for i in range(len(column)):
         # 최대 생성 갯수 설정(최대 12개)
-        if i > 12:
+        if i > 10:
             break
 
         # LINE 템플릿 상의 글자수 제한 :  제목 40자, 내용 60자
-        # title = str(column[i]["title"][:39])
         title = str(column[i]["title"])
-        # text = str(column[i]["text"][:59])
+        if len(title) > 40:
+            title = title[:38] + "…"
+        # title = str(column[i]["title"])
+        print(title)
         text = str(column[i]["text"])
-        image_url = str(column[i]["img_url"])
-        url = str(column[i]["url"])
-        date = "date here"
+        if len(text) > 60:
+            text = text[:55] + "…"
+        # text = str(column[i]["text"])
+        image_url = urllib.parse.quote(column[i]["img_url"], safe="/:")
+        print(image_url)
+        url = urllib.parse.quote(column[i]["url"], safe="/:")
+        print(url)
+        date = str(column[i]["date"])
         bubble = BubbleContainer(
             hero=ImageComponent(
                 url=image_url,
                 size="full",
                 aspect_ratio="16:9",
                 aspect_mode="cover",
-                action=URIAction(uri=url, label="label"),
             ),
             body=BoxComponent(
                 layout="vertical",
                 contents=[
                     # title
                     TextComponent(text=title, weight="bold", size="lg", wrap=True),
-                    # review
+                    # article
                     BoxComponent(
                         layout="baseline",
                         margin="lg",
@@ -71,14 +78,13 @@ def generate_carousels(column):
             footer=BoxComponent(
                 layout="vertical",
                 spacing="sm",
-                color="#ffffff",
-                flex="0",
                 background_color="#42659a",
                 contents=[
                     # callAction
                     ButtonComponent(
                         style="link",
                         height="sm",
+                        color="#ffffff",
                         action=URIAction(label="본문 읽기", uri=url),
                     ),
                 ],

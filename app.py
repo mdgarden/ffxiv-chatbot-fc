@@ -117,16 +117,23 @@ def callback():
 def handle_message(event):
     response_content = ""
     user_message = event.message.text
+    group_list = get_group_list()
 
     if user_message[0:1] == "@":
         if isinstance(event.source, SourceGroup):
-            for room in group_list:
-                if event.source.group_id == room["room_id"] and room["region"] == "jp":
-                    response_content = command.find_command(user_message)
-                else:
-                    response_content = command.find_command_kr(user_message)
+            room = next(
+                room for room in group_list if room["room_id"] == event.source.group_id
+            )
+            print(room)
+            if room["region"] == "jp":
+                response_content = command.find_command(user_message)
+                print("jp room")
+            else:
+                response_content = command.find_command_kr(user_message)
+                print("kr room")
         else:
             response_content = command.find_command_kr(user_message)
+            print("no data group")
 
         # 텍스트 메세지면 except로 출력
         try:
