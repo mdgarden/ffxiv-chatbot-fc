@@ -21,22 +21,20 @@ def generate_carousels(column):
         # 최대 생성 갯수 설정(최대 12개)
         if i > 10:
             break
-
+        # set properties
         # LINE 템플릿 상의 글자수 제한 :  제목 40자, 내용 60자
         title = str(column[i]["title"])
         if len(title) > 40:
             title = title[:38] + "…"
-        # title = str(column[i]["title"])
-        print(title)
+
         text = str(column[i]["text"])
         if len(text) > 60:
             text = text[:55] + "…"
-        # text = str(column[i]["text"])
+
         image_url = urllib.parse.quote(column[i]["img_url"], safe="/:")
-        print(image_url)
         url = urllib.parse.quote(column[i]["url"], safe="/:")
-        print(url)
         date = str(column[i]["date"])
+
         bubble = BubbleContainer(
             hero=ImageComponent(
                 url=image_url,

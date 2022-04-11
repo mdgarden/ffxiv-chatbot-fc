@@ -55,7 +55,7 @@ def search_db(keyword):
 
         if keyword == DB[item_num][locale]:
             result.append(item_result)
-            message = (
+            message = """
                 '"'
                 + keyword
                 + '"의 검색결과입니다.'
@@ -68,7 +68,7 @@ def search_db(keyword):
                 + "\n"
                 + "En : "
                 + result[0]["words"]["en"]
-            )
+            """
             return message
 
         elif keyword in DB[item_num][locale]:
@@ -128,3 +128,11 @@ def search_db(keyword):
             + result[len(result) - 3]["words"][locale]
         )
         return message
+
+        # search에서 완성된 형태로 가공, 이 파일에서는 삭제
+        # line_bot_api.reply_message(
+        #     event.reply_token,
+        #     TextSendMessage(
+        #         text="현재 ET " + get_eorzea_time() + "\n\n" + response_content
+        #     ),
+        # )

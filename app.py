@@ -15,24 +15,103 @@ from linebot.models import (
     TextSendMessage,
     SourceGroup,
     SourceRoom,
+    JoinEvent,
 )
 
-from src.ingame import get_eorzea_time
-
-# take environment variables from .env
+# get environment variables from .env
 load_dotenv()
 app = Flask(__name__)
 
 
-def get_group_list():
+def get_room_list():
     with MongoClient(os.getenv("MONGO_URL")):
         db = MongoClient(os.getenv("MONGO_URL")).tweetify
-        group_list = list(db.users.find())
-    return group_list
+        room_list = list(db.users.find())
+    return room_list
 
 
-group_list = get_group_list()
-YOSHIDA = ["요시다아아아아", "요시다!!!!!", "요시다?", "요시다...."]
+def get_room_region(event):
+    room_list = get_room_list()
+    if isinstance(event.source, SourceGroup):
+        room = next(
+            item for item in room_list if item["group_id"] == event.source.group_id
+        )
+    elif isinstance(event.source, SourceRoom):
+        room = next(
+            item for item in room_list if item["room_id"] == event.source.room_id
+        )
+    else:
+        room = next(
+            item for item in room_list if item["user_id"] == event.source.user_id
+        )
+    return room["region"]
+
+
+def get_room_type(event):
+    if isinstance(event.source, SourceGroup):
+        sender_id = {"type": event.source.type, "group_id": event.source.group_id}
+    elif isinstance(event.source, SourceRoom):
+        sender_id = {"type": event.source.type, "room_id": event.source.room_id}
+    else:
+        sender_id = {"type": event.source.type, "user_id": event.source.user_id}
+    return sender_id
+
+
+def update_region(event, region):
+    sender_id = get_room_type(event)
+    with MongoClient(os.getenv("MONGO_URL")):
+        db = MongoClient(os.getenv("MONGO_URL")).tweetify
+        db.users.update_one(
+            sender_id,
+            {"$set": {"status": os.getenv("STATUS"), "region": region}},
+            upsert=True,
+        )
+
+
+def leave_group(event):
+    if isinstance(event.source, SourceGroup):
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text="Leaving group")
+        )
+        line_bot_api.leave_group(event.source.group_id)
+    elif isinstance(event.source, SourceRoom):
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text="Leaving room")
+        )
+        line_bot_api.leave_room(event.source.room_id)
+    else:
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text="Bot can't leave from 1:1 chat")
+        )
+
+
+def delete_room(event):
+    sender_id = get_room_type(event)
+
+    with MongoClient(os.getenv("MONGO_URL")):
+        db = MongoClient(os.getenv("MONGO_URL")).tweetify
+        db.users.update_one(
+            sender_id,
+            {"$set": {"status": "leave", "region": "kr"}},
+            upsert=True,
+        )
+
+
+def reply_static_message(message):
+    YOSHIDA = ["요시다아아아아", "요시다!!!!!", "요시다?", "요시다...."]
+    if "요시다" in message:
+        return YOSHIDA[randint(0, 3)]
+    if message == "오메가 오메가":
+        return message
+
+
+def send_message(event, message):
+    # message should formatted (require type)
+    # https://developers.line.biz/en/reference/messaging-api/#messages
+    line_bot_api.reply_message(event.reply_token, messages=message)
+
+
+room_list = get_room_list()
 
 
 # get channel_secret and channel_access_token from your environment variable
@@ -49,6 +128,8 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
+room_list = get_room_list()
+
 
 @app.route("/")
 def hello_world():
@@ -56,33 +137,25 @@ def hello_world():
 
 
 @app.route("/tweet", methods=["POST"])
-def new_tweet():
-    # get request body as text
+def send_new_tweet():
     body = request.get_data(as_text=True)
-
     response = app.response_class(
         response=json.dumps(body), status=200, mimetype="application/json"
     )
     data = json.loads(body)
 
-    # format message
-    text = data["text"]
-    link = data["link"]
-    message = text + "\n\n\n" + link
-    print(message)
-    group_list = get_group_list()
     try:
-        for group in group_list:
-            print("group")
-            print(group)
+        for group in room_list:
             if (
                 group["status"] == os.getenv("STATUS")
                 and group["region"] == data["region"]
             ):
                 line_bot_api.push_message(
-                    group["room_id"], [TextSendMessage(text=message)]
+                    group["room_id"], [TextSendMessage(text=data["text"])]
                 )
-                print("send!")
+                line_bot_api.push_message(
+                    group["room_id"], [TextSendMessage(text=data["link"])]
+                )
 
     except Exception as e:
         print(e)
@@ -113,110 +186,44 @@ def callback():
     return "OK"
 
 
+@handler.add(JoinEvent)
+def handle_join(event):
+    update_region(event, "kr")
+    line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text="타타루에용! 잘 부탁드립니당!")
+    )
+
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    response_content = ""
     user_message = event.message.text
-    group_list = get_group_list()
+    response_content = ""
+    region = "kr"
+
+    try:
+        region = get_room_region(event)
+    except Exception as e:
+        update_region(event, "kr")
+        print(e)
 
     if user_message[0:1] == "@":
-        if isinstance(event.source, SourceGroup):
-            room = next(
-                room for room in group_list if room["room_id"] == event.source.group_id
-            )
-            print(room)
-            if room["region"] == "jp":
-                response_content = command.find_command(user_message)
-                print("jp room")
-            else:
-                response_content = command.find_command_kr(user_message)
-                print("kr room")
-        else:
-            response_content = command.find_command_kr(user_message)
-            print("no data group")
-
-        # 텍스트 메세지면 except로 출력
-        try:
-            line_bot_api.reply_message(event.reply_token, messages=response_content)
-        except Exception as ex:
-            print(ex)
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text=response_content)
-            )
-
+        response_content = command.find_command(region, user_message)
     elif user_message[0:1] == "!":
-        user_message = user_message[1:]
-        response_content = search.search_db(user_message)
-
-        if response_content is None:
-            return
-
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(
-                text="현재 ET " + get_eorzea_time() + "\n\n" + response_content
-            ),
-        )
-
-    elif user_message == "bye":
-        if isinstance(event.source, SourceGroup):
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="Leaving group")
-            )
-            line_bot_api.leave_group(event.source.group_id)
-            print(event.source.group_id, SourceGroup)
-        elif isinstance(event.source, SourceRoom):
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="Leaving room")
-            )
-            line_bot_api.leave_room(event.source.room_id)
-            print(event.source.room_id, SourceRoom)
-        else:
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="Bot can't leave from 1:1 chat")
-            )
-
-    # 글로벌 서버 전환
+        response_content = search.search_db(user_message[1:])
+    elif "요시다" in user_message or user_message == "오메가 오메가":
+        reply_static_message(user_message)
     elif user_message == "For this journey's end is but one step forward to tomorrow":
-        if isinstance(event.source, SourceGroup):
-            switch_server("group", event.source.group_id, "jp")
-        if isinstance(event.source, SourceRoom):
-            switch_server("room", event.source.room_id, "jp")
+        update_region(event, "jp")
+        response_content = TextSendMessage(text="글로벌 서버의 정보를 알려드려용!")
+    elif user_message == "바나나 받아라 타이탄":
+        update_region(event, "kr")
+        response_content = TextSendMessage(text="한국 서버의 정보를 알려드려용!")
+    elif user_message == "bye":
+        delete_room(event)
+        leave_group(event)
 
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text="글로벌 서버 채팅방으로 전환합니다.")
-        )
-
-    # 한국 서버 전환
-    elif user_message == "최팀장 꽃미남":
-        if isinstance(event.source, SourceGroup):
-            switch_server("group", event.source.group_id, "kr")
-        if isinstance(event.source, SourceRoom):
-            switch_server("room", event.source.room_id, "kr")
-
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text="한국 서버 채팅방으로 전환합니다.")
-        )
-
-    # toy
-    elif user_message == "오메가 오메가":
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="오메가 오메가"))
-
-    elif "요시다" in user_message:
-        pick_yoshida = YOSHIDA[randint(0, 3)]
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text=pick_yoshida)
-        )
-
-
-def switch_server(source, id, region):
-    with MongoClient(os.getenv("MONGO_URL")):
-        db = MongoClient(os.getenv("MONGO_URL")).tweetify
-        db.users.update_one(
-            {"room_id": id},
-            {"$set": {"region": region, "source": source}},
-            upsert=True,
-        )
+    if response_content is not None:
+        send_message(event, response_content)
 
 
 if __name__ == "__main__":

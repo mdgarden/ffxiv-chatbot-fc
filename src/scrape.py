@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import urllib3
 
 from src import template
+from linebot.models import TextSendMessage
 
 # import template
 from urllib3.exceptions import InsecureRequestWarning
@@ -109,7 +110,7 @@ def extract_maintenance_post_jp():
             lists.append(item)
         message = template.generate_carousels(lists)
     else:
-        message = "글섭의 최신 점검관련 공지가 없습니다."
+        message = TextSendMessage(text="글섭의 최신 점검관련 공지가 없습니다.")
 
     return message
 

@@ -1,4 +1,5 @@
 from src import scrape
+from linebot.models import TextSendMessage
 
 command_list = {
     "@점검": {"category": "maintenance"},
@@ -12,51 +13,46 @@ command_list = {
 # TODO:링크 버튼 형식으로 만들기
 
 
-def find_command(command):
-    try:
-        jp_command = command_list[command]
-    except Exception as ex:
-        print(ex)
+def find_command(region, command):
+    # 여기 예외처리 왜 있음??
+    # try:
+    #     jp_command = command_list[command]
+    # except Exception as ex:
+    #     print(ex)
 
-    if jp_command is not None:
+    if command_list[command] is not None:
         category = command_list[command]["category"]
-        if category == "maintenance":
+        if category == "maintenance" and region == "jp":
             return scrape.extract_maintenance_post_jp()
-        elif category == "link":
-            return send_link()
-        elif category == "manual":
-            return send_manual()
-        elif category == "topics":
-            return scrape.extract_topic_post_jp()
-        else:
-            pass
-
-
-def find_command_kr(command):
-    try:
-        kr_command = command_list[command]
-    except Exception as ex:
-        print(ex)
-
-    if kr_command is not None:
-        category = command_list[command]["category"]
-        if category == "maintenance":
+        elif category == "maintenance" and region == "kr":
             return scrape.extract_maintenance_post_kr()
         elif category == "link":
             return send_link()
         elif category == "manual":
             return send_manual()
-        elif category == "topics":
-            return scrape.extract_topic_kr()
+        elif category == "topics" and region == "jp":
+            return scrape.extract_topic_post_jp()
+        elif category == "topics" and region == "kr":
+            return scrape.extract_topic_post_kr()
         else:
             pass
 
 
 def send_manual():
-    message = "명령어 목록이에용!\n@공지 : 최신 토픽 목록\n@점검 : 최신 점검 관련 공지 목록(한섭 업뎃 예정)\n!+검색어 : 해당 아이템을 검색 후 언어별 이름 출력\n@링크 : 각종 링크를 불러옵니다"
-    return message
+    message = """명령어 목록이에용!
+    @공지 : 최신 토픽 목록
+    @점검 : 최신 점검 관련 공지 목록(한섭 업뎃 예정)
+    !+검색어 : 해당 아이템을 검색 후 언어별 이름 출력
+    @링크 : 각종 링크를 불러옵니다
+    """
+
+    return TextSendMessage(text=message)
 
 
 def send_link():
-    message = "글섭 공홈 : https://jp.finalfantasyxiv.com/lodestone/ \n한섭 공홈 : https://www.ff14.co.kr/main \n지름신 : https://store.jp.square-enix.com/item_list.html?sale_cd=1#SERIES=11&pointercat=SERIES"
-    return message
+    message = """
+    글섭 공홈 : https://jp.finalfantasyxiv.com/lodestone/ 
+    \n한섭 공홈 : https://www.ff14.co.kr/main 
+    \n지름신 : https://store.jp.square-enix.com/item_list.html?sale_cd=1#SERIES=11&pointercat=SERIES
+    """
+    return TextSendMessage(text=message)
