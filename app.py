@@ -100,9 +100,9 @@ def delete_room(event):
 def reply_static_message(message):
     YOSHIDA = ["요시다아아아아", "요시다!!!!!", "요시다?", "요시다...."]
     if "요시다" in message:
-        return YOSHIDA[randint(0, 3)]
+        return TextSendMessage(text=YOSHIDA[randint(0, 3)])
     if message == "오메가 오메가":
-        return message
+        return TextSendMessage(text=message)
 
 
 def send_message(event, message):
@@ -214,7 +214,7 @@ def handle_message(event):
 
     # quick reply
     elif "요시다" in user_message or user_message == "오메가 오메가":
-        reply_static_message(user_message)
+        response_content = reply_static_message(user_message)
 
     # switch server
     elif user_message == "For this journey's end is but one step forward to tomorrow":
