@@ -11,11 +11,11 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
     MessageEvent,
+    JoinEvent,
     TextMessage,
     TextSendMessage,
     SourceGroup,
     SourceRoom,
-    JoinEvent,
 )
 
 # get environment variables from .env
@@ -28,6 +28,16 @@ def get_room_list():
         db = MongoClient(os.getenv("MONGO_URL")).tweetify
         room_list = list(db.users.find())
     return room_list
+
+
+def get_room_type(event):
+    if isinstance(event.source, SourceGroup):
+        sender_id = {"type": event.source.type, "group_id": event.source.group_id}
+    elif isinstance(event.source, SourceRoom):
+        sender_id = {"type": event.source.type, "room_id": event.source.room_id}
+    else:
+        sender_id = {"type": event.source.type, "user_id": event.source.user_id}
+    return sender_id
 
 
 def get_room_region(event):
@@ -45,16 +55,6 @@ def get_room_region(event):
             item for item in room_list if item["user_id"] == event.source.user_id
         )
     return room["region"]
-
-
-def get_room_type(event):
-    if isinstance(event.source, SourceGroup):
-        sender_id = {"type": event.source.type, "group_id": event.source.group_id}
-    elif isinstance(event.source, SourceRoom):
-        sender_id = {"type": event.source.type, "room_id": event.source.room_id}
-    else:
-        sender_id = {"type": event.source.type, "user_id": event.source.user_id}
-    return sender_id
 
 
 def update_region(event, region):
@@ -151,10 +151,10 @@ def send_new_tweet():
                 and group["region"] == data["region"]
             ):
                 line_bot_api.push_message(
-                    group["room_id"], [TextSendMessage(text=data["text"])]
+                    group["group_id"], [TextSendMessage(text=data["text"])]
                 )
                 line_bot_api.push_message(
-                    group["room_id"], [TextSendMessage(text=data["link"])]
+                    group["group_id"], [TextSendMessage(text=data["link"])]
                 )
 
     except Exception as e:
@@ -206,18 +206,25 @@ def handle_message(event):
         update_region(event, "kr")
         print(e)
 
+    # command
     if user_message[0:1] == "@":
         response_content = command.find_command(region, user_message)
     elif user_message[0:1] == "!":
         response_content = search.search_db(user_message[1:])
+
+    # quick reply
     elif "요시다" in user_message or user_message == "오메가 오메가":
         reply_static_message(user_message)
+
+    # switch server
     elif user_message == "For this journey's end is but one step forward to tomorrow":
         update_region(event, "jp")
         response_content = TextSendMessage(text="글로벌 서버의 정보를 알려드려용!")
     elif user_message == "바나나 받아라 타이탄":
         update_region(event, "kr")
         response_content = TextSendMessage(text="한국 서버의 정보를 알려드려용!")
+
+    # leave group
     elif user_message == "bye":
         delete_room(event)
         leave_group(event)
