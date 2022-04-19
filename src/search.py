@@ -56,7 +56,8 @@ def search_db(keyword):
         if keyword == DB[item_num][locale]:
             result.append(item_result)
             message = (
-                keyword
+                '"'
+                + keyword
                 + '"의 검색결과입니다.'
                 + "\n\n"
                 + "Ko : "
