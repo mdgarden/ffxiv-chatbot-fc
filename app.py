@@ -42,18 +42,28 @@ def get_room_type(event):
 
 def get_room_region(event):
     room_list = get_room_list()
+    room = {}
     if isinstance(event.source, SourceGroup):
-        room = next(
-            item for item in room_list if item["group_id"] == event.source.group_id
-        )
+        for room in room_list:
+            try:
+                if room["group_id"] == event.source.user_id:
+                    return room
+            except Exception as e:
+                print(e)
     elif isinstance(event.source, SourceRoom):
-        room = next(
-            item for item in room_list if item["room_id"] == event.source.room_id
-        )
+        for room in room_list:
+            try:
+                if room["room_id"] == event.source.user_id:
+                    return room
+            except Exception as e:
+                print(e)
     else:
-        room = next(
-            item for item in room_list if item["user_id"] == event.source.user_id
-        )
+        for room in room_list:
+            try:
+                if room["user_id"] == event.source.user_id:
+                    return room
+            except Exception as e:
+                print(e)
     return room["region"]
 
 
@@ -198,12 +208,14 @@ def handle_join(event):
 def handle_message(event):
     user_message = event.message.text
     response_content = ""
-    region = "kr"
+    region = ""
 
     try:
         region = get_room_region(event)
+        print(region)
     except Exception as e:
         update_region(event, "kr")
+        region = get_room_region(event)
         print(e)
 
     # command
