@@ -42,10 +42,11 @@ def get_room_type(event):
 
 def get_room_region(event):
     room_list = get_room_list()
+    # TODO: find room by value(user_id)
     if isinstance(event.source, SourceGroup):
         for room in room_list:
             try:
-                if room["group_id"] == event.source.user_id:
+                if room["group_id"] == event.source.group_id:
                     return room["region"]
             except Exception as e:
                 print("this instance is not group")
@@ -53,7 +54,7 @@ def get_room_region(event):
     elif isinstance(event.source, SourceRoom):
         for room in room_list:
             try:
-                if room["room_id"] == event.source.user_id:
+                if room["room_id"] == event.source.room_id:
                     return room["region"]
             except Exception as e:
                 print("this instance is not room")
