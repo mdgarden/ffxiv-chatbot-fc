@@ -1,7 +1,7 @@
 import re
 import json
 import fasttext
-
+from linebot.models import TextSendMessage
 
 DB_PATH = "src/assets/data/items/item_db.json"
 TARTO_URL = "https://ff14.tar.to/item/list?keyword="
@@ -55,9 +55,8 @@ def search_db(keyword):
 
         if keyword == DB[item_num][locale]:
             result.append(item_result)
-            message = """
-                '"'
-                + keyword
+            message = (
+                keyword
                 + '"의 검색결과입니다.'
                 + "\n\n"
                 + "Ko : "
@@ -68,15 +67,15 @@ def search_db(keyword):
                 + "\n"
                 + "En : "
                 + result[0]["words"]["en"]
-            """
-            return message
+            )
+            return TextSendMessage(text=message)
 
         elif keyword in DB[item_num][locale]:
             result.append(item_result)
 
     if len(result) == 0:
         message = keyword + "의 검색결과가 없습니다. 검색어를 확인해주세요."
-        return message
+        return TextSendMessage(text=message)
 
     elif len(result) == 1:
         message = (
@@ -93,7 +92,7 @@ def search_db(keyword):
             + "En : "
             + result[0]["words"]["en"]
         )
-        return message
+        return TextSendMessage(text=message)
 
     elif len(result) < 3 and len(result) > 1:
         message = (
@@ -110,7 +109,7 @@ def search_db(keyword):
             + "En : "
             + result[len(result) - 1]["words"]["en"]
         )
-        return message
+        return TextSendMessage(text=message)
 
     else:
         message = (
@@ -127,12 +126,4 @@ def search_db(keyword):
             + "③ "
             + result[len(result) - 3]["words"][locale]
         )
-        return message
-
-        # search에서 완성된 형태로 가공, 이 파일에서는 삭제
-        # line_bot_api.reply_message(
-        #     event.reply_token,
-        #     TextSendMessage(
-        #         text="현재 ET " + get_eorzea_time() + "\n\n" + response_content
-        #     ),
-        # )
+        return TextSendMessage(text=message)

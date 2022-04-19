@@ -22,6 +22,7 @@ def merge_json(target, source):
             source[key] = {"ko": "해당 내용이 없습니다."}
             merged_json[key] = target[key] | source[key]
 
+    print(merged_json)
     return merged_json
 
 

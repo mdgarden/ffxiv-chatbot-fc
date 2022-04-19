@@ -14,14 +14,17 @@ command_list = {
 
 
 def find_command(region, command):
-    # 여기 예외처리 왜 있음??
-    # try:
-    #     jp_command = command_list[command]
-    # except Exception as ex:
-    #     print(ex)
+    # send error if command is not correct or not found
+    try:
+        command_list[command]
+    except Exception as e:
+        print(e)
+        print("command not found")
+        return
 
     if command_list[command] is not None:
         category = command_list[command]["category"]
+
         if category == "maintenance" and region == "jp":
             return scrape.extract_maintenance_post_jp()
         elif category == "maintenance" and region == "kr":
@@ -34,8 +37,6 @@ def find_command(region, command):
             return scrape.extract_topic_post_jp()
         elif category == "topics" and region == "kr":
             return scrape.extract_topic_post_kr()
-        else:
-            pass
 
 
 def send_manual():
@@ -50,8 +51,8 @@ def send_manual():
 
 
 def send_link():
-    message = """글섭 공홈 : https://jp.finalfantasyxiv.com/lodestone/ 
-    한섭 공홈 : https://www.ff14.co.kr/main 
+    message = """글섭 공홈 : https://jp.finalfantasyxiv.com/lodestone/
+    한섭 공홈 : https://www.ff14.co.kr/main
     지름신 : https://store.jp.square-enix.com/item_list.html?sale_cd=1#SERIES=11&pointercat=SERIES
     """
     return TextSendMessage(text=message)

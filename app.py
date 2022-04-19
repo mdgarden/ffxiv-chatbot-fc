@@ -228,7 +228,11 @@ def handle_message(event):
     elif user_message == "bye":
         delete_room(event)
         leave_group(event)
+    else:
+        return
 
+    if response_content is None:
+        return
     if response_content is not None:
         send_message(event, response_content)
 
