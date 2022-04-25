@@ -33,7 +33,7 @@ def get_soup(url):
     return soup
 
 
-def extract_topic_post_jp():
+def extract_topic_jp():
     topics = []
 
     topic_list = get_soup(FFXIV_JP_URL + LODESTONE).find_all(

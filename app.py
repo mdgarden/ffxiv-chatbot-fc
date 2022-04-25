@@ -23,11 +23,14 @@ load_dotenv()
 app = Flask(__name__)
 
 
-def get_room_list():
+def get_room_list_from_db():
     with MongoClient(os.getenv("MONGO_URL")):
         db = MongoClient(os.getenv("MONGO_URL")).tweetify
         room_list = list(db.users.find())
     return room_list
+
+
+room_list = get_room_list_from_db()
 
 
 def get_room_type(event):
@@ -41,7 +44,7 @@ def get_room_type(event):
 
 
 def get_room_region(event):
-    room_list = get_room_list()
+    global room_list
     # TODO: find room by value(user_id)
     if isinstance(event.source, SourceGroup):
         for room in room_list:
@@ -62,14 +65,16 @@ def get_room_region(event):
     else:
         for room in room_list:
             try:
-                if room["user_id"] == event.source.user_id:
+                if room["user_id"] == event.source.userId:
                     return room["region"]
             except Exception as e:
+                print(event.source)
                 print("this instance is not 1:1")
                 print(e)
 
 
 def update_region(event, region):
+    global room_list
     sender_id = get_room_type(event)
     with MongoClient(os.getenv("MONGO_URL")):
         db = MongoClient(os.getenv("MONGO_URL")).tweetify
@@ -78,6 +83,8 @@ def update_region(event, region):
             {"$set": {"status": os.getenv("STATUS"), "region": region}},
             upsert=True,
         )
+    room_list = get_room_list_from_db()
+    return room_list
 
 
 def leave_group(event):
@@ -107,6 +114,7 @@ def delete_room(event):
             {"$set": {"status": "leave", "region": "kr"}},
             upsert=True,
         )
+    return
 
 
 def reply_static_message(message):
@@ -123,9 +131,6 @@ def send_message(event, message):
     line_bot_api.reply_message(event.reply_token, messages=message)
 
 
-room_list = get_room_list()
-
-
 # get channel_secret and channel_access_token from your environment variable
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 channel_secret = os.getenv("LINE_CHANNEL_SECRET")
@@ -140,8 +145,6 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-room_list = get_room_list()
-
 
 @app.route("/")
 def hello_world():
@@ -150,6 +153,7 @@ def hello_world():
 
 @app.route("/tweet", methods=["POST"])
 def send_new_tweet():
+    global room_list
     body = request.get_data(as_text=True)
     response = app.response_class(
         response=json.dumps(body), status=200, mimetype="application/json"
@@ -163,10 +167,7 @@ def send_new_tweet():
                 and group["region"] == data["region"]
             ):
                 line_bot_api.push_message(
-                    group["group_id"], [TextSendMessage(text=data["text"])]
-                )
-                line_bot_api.push_message(
-                    group["group_id"], [TextSendMessage(text=data["link"])]
+                    group["group_id"], TextSendMessage(text=data["text"])
                 )
 
     except Exception as e:
@@ -208,18 +209,16 @@ def handle_join(event):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    global room_list
     user_message = event.message.text
     response_content = ""
     region = ""
 
     try:
         region = get_room_region(event)
-        print("region")
-        print(region)
     except Exception as e:
         update_region(event, "kr")
-        region = get_room_region(event)
-        print("not found region")
+        print("region not found")
         print(e)
 
     # command
@@ -233,7 +232,7 @@ def handle_message(event):
         response_content = reply_static_message(user_message)
 
     # switch server
-    elif user_message == "For this journey's end is but one step forward to tomorrow":
+    elif user_message == "선대 아젬 베네스":
         update_region(event, "jp")
         response_content = TextSendMessage(text="글로벌 서버의 정보를 알려드려용!")
     elif user_message == "바나나 받아라 타이탄":

@@ -14,6 +14,7 @@ command_list = {
 
 
 def find_command(region, command):
+    print(region)
     # send error if command is not correct or not found
     try:
         command_list[command]
@@ -26,17 +27,21 @@ def find_command(region, command):
         category = command_list[command]["category"]
 
         if category == "maintenance" and region == "jp":
+            print("scraping(jp)...")
             return scrape.extract_maintenance_post_jp()
         elif category == "maintenance" and region == "kr":
+            print("scraping(kr)...")
             return scrape.extract_maintenance_post_kr()
         elif category == "link":
             return send_link()
         elif category == "manual":
             return send_manual()
         elif category == "topics" and region == "jp":
-            return scrape.extract_topic_post_jp()
+            print("scraping(jp)...")
+            return scrape.extract_topic_jp()
         elif category == "topics" and region == "kr":
-            return scrape.extract_topic_post_kr()
+            print("scraping(kr)...")
+            return scrape.extract_topic_kr()
 
 
 def send_manual():
