@@ -65,7 +65,7 @@ def get_room_region(event):
     else:
         for room in room_list:
             try:
-                if room["user_id"] == event.source.userId:
+                if room["user_id"] == event.source.user_id:
                     return room["region"]
             except Exception as e:
                 print(event.source)
